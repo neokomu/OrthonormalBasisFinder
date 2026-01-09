@@ -1,7 +1,7 @@
 import numpy as np
 
 def main():
-    print("\n\n")
+    print("\n")
 
     while True: # loop to get the user input vectors
         try:

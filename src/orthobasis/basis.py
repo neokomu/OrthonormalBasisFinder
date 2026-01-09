@@ -4,7 +4,7 @@ from .exceptions import (
     DependentVectorSetError
 )
 
-from .orthobasis import (
+from .linalg import (
     gram_schmidt,
     normalize,
     is_linearly_independent,

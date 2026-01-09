@@ -1,5 +1,5 @@
 import numpy as np
-import linalg.basis as ob
+import orthobasis as ob
 
 def main():
     vectors = np.array([
@@ -14,6 +14,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# to run, get into your env, choose root folder as ORTHONORMALBASISFINDER and paste this in terminal:
-# python -m testing.test_gram

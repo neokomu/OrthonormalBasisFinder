@@ -1,0 +1,95 @@
+/* MEMBER C: STYLING
+   File: style.css
+   ----------------------------------------
+   Responsibilities:
+   1. Define Color Variables (Dark BG, Neon Pink, etc.).
+   2. Style the Control Cards and Stepper Buttons.
+   3. Handle "Absolute Positioning" for the graph overlays (Legend/Reset).
+   4. Style the Toast Notification.
+*/
+
+/* =========================================
+   SECTION 1: VARIABLES & RESET
+   ========================================= */
+:root {
+    /* TODO: Define --bg-dark (Main background) */
+    /* TODO: Define --panel-bg (Card background) */
+    /* TODO: Define --neon-pink (Accent color) */
+    /* TODO: Define --text-white */
+}
+
+/* TODO: Set body background, font-family (Courier New/Monospace), and text color. */
+
+/* =========================================
+   SECTION 2: COMPONENT STYLES
+   ========================================= */
+
+/* --- Control Cards --- */
+/* TODO: Style .control-card:
+     - Background color (lighter than body).
+     - Border radius.
+     - Flexbox layout (label on left, stepper on right).
+*/
+
+/* --- Stepper Buttons --- */
+/* TODO: Style (+ / -) buttons:
+     - Square shape.
+     - Neon pink background.
+     - White text.
+     - No border.
+*/
+
+/* --- Compute Button --- */
+/* TODO: Style .btn-primary:
+     - Full width.
+     - Neon pink background.
+     - Bold text.
+     - Margin top/bottom.
+*/
+
+/* --- Input Fields --- */
+/* TODO: Style input[type="number"]:
+     - Dark background.
+     - Remove default borders.
+     - Rounded corners.
+     - Center text alignment.
+*/
+
+/* =========================================
+   SECTION 3: GRAPH OVERLAYS (Crucial)
+   ========================================= */
+
+/* --- Graph Wrapper --- */
+/* TODO: Style .graph-wrapper:
+     - Position: relative (Important! This anchors the absolute children).
+     - Background: Very dark gray (almost black).
+     - Height: Fixed height (e.g., 500px).
+*/
+
+/* --- Reset View Button --- */
+/* TODO: Style #reset-view-btn:
+     - Position: absolute.
+     - Top: 20px, Right: 20px.
+     - Z-index: 10 (To sit on top of the canvas).
+     - Transparent/Dark background with border.
+*/
+
+/* --- Custom Legend --- */
+/* TODO: Style .custom-legend:
+     - Position: absolute.
+     - Bottom: 20px, Left: 20px.
+     - Z-index: 10.
+     - Semi-transparent background.
+     - Border radius.
+*/
+
+/* =========================================
+   SECTION 4: TOAST NOTIFICATION
+   ========================================= */
+/* TODO: Style #toast-success:
+     - Position: fixed (Top-Left or Top-Center).
+     - Background: Dark Green.
+     - Border: Bright Green.
+     - Flexbox layout for text and close button.
+     - Class .hidden { display: none; }
+*/

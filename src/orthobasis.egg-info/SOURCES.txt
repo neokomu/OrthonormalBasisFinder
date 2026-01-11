@@ -6,6 +6,7 @@ src/orthobasis/exceptions.py
 src/orthobasis.egg-info/PKG-INFO
 src/orthobasis.egg-info/SOURCES.txt
 src/orthobasis.egg-info/dependency_links.txt
+src/orthobasis.egg-info/requires.txt
 src/orthobasis.egg-info/top_level.txt
 src/orthobasis/linalg/__init__.py
 src/orthobasis/linalg/gram_schmidt_alg.py

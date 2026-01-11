@@ -1,0 +1,12 @@
+blinker==1.9.0
+click==8.3.1
+colorama==0.4.6
+Flask==3.1.2
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+numpy==2.4.0
+-e git+https://github.com/effytamine/OrthonomalBasisFinder.git@23d7d0a00f817507385a9111b18db82e4efbc3cd#egg=orthobasis
+setuptools==80.9.0
+Werkzeug==3.1.5
+wheel==0.45.1

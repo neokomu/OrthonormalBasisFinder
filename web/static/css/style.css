@@ -1,0 +1,471 @@
+/* File: style.css
+   ----------------------------------------
+   Responsibilities:
+   1. Define Color Variables (Dark BG, Neon Pink, etc.).
+   2. Style the Control Cards and Stepper Buttons.
+   3. Handle "Absolute Positioning" for the graph overlays (Legend/Reset).
+   4. Style the Toast Notification.
+   5. Style Tabs & Documentation (How-To Section).
+*/
+
+/* =========================================
+   SECTION 1: VARIABLES & RESET
+   ========================================= */
+
+:root {
+    --bg: #1e1e1e;
+    --panel: #111;
+    --pink: #ff8acb;
+    --pink-dark: #7a4a63;
+    --text: #eaeaea;
+    --muted: #777;
+    --green: #1f7a3f;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+}
+
+.container {
+    width: 700px;
+    padding: 30px;
+    background: #1b1b1b;
+    border-radius: 12px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    color: var(--pink);
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    /* Optical alignment fix */
+    margin-right: 5px;
+}
+
+/* =========================================
+   SECTION 2: COMPONENT STYLES
+   ========================================= */
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.control-box {
+    width: 48%;
+}
+
+.label {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text);
+    letter-spacing: 0.5px;
+}
+
+.counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--panel);
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.counter button {
+    background: var(--pink);
+    border: none;
+    color: black;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.counter-input {
+    width: 50px;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.counter-input::-webkit-outer-spin-button,
+.counter-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.counter button:disabled {
+    background: var(--pink-dark);
+    color: #bbb;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.vector-input {
+    background: var(--panel);
+    height: auto;
+    border-radius: 8px;
+    padding: 25px 30px 25px 10px;
+    margin-bottom: 20px;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+}
+
+.vector-input.empty-state {
+    min-height: 150px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.vector {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+}
+
+.vector-label {
+    color: var(--text);
+    font-weight: bold;
+    font-size: 14px;
+    width: 30px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.vector input {
+    flex: 1;
+    min-width: 0;
+    height: 50px;
+    padding: 6px;
+    background: #222;
+    border: 1px solid #333;
+    color: var(--text);
+    border-radius: 4px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Interactive Input States */
+.vector input:hover {
+    border-color: #fff;
+    background: #2a2a2a;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.vector input:read-only {
+    background: #2a1f25;
+    color: var(--pink);
+    border-color: #44333b;
+    cursor: default;
+    font-weight: bold;
+}
+
+.compute-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    background: var(--pink-dark);
+    color: #bbb;
+    cursor: not-allowed;
+    margin-bottom: 20px;
+    transition: background 0.2s;
+}
+
+.compute-btn.active {
+    background: var(--pink);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.compute-btn.active:hover {
+    background: #ffb3dc;
+    box-shadow: 0 0 15px rgba(255, 138, 203, 0.4);
+    transform: translateY(-1px);
+}
+
+.compute-btn.active:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 5px rgba(255, 138, 203, 0.4);
+}
+
+/* =========================================
+   SECTION 3: GRAPH OVERLAYS
+   ========================================= */
+
+.output {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 15px;
+    display: none;
+}
+
+.output-header {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: var(--muted);
+}
+
+.graph-area {
+    position: relative;
+    height: 350px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #555;
+}
+
+#graphPlot {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reset-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+    background: #222;
+    color: var(--text);
+    border: 1px solid #333;
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+
+.reset-btn:hover {
+    background: #333;
+}
+
+.legend-box {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    z-index: 10;
+    background: rgba(26, 26, 26, 0.9);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 12px;
+    min-width: 140px;
+}
+
+.legend-title {
+    color: var(--pink);
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+    color: #ccc;
+}
+
+.legend-color {
+    width: 12px;
+    height: 2px;
+    display: inline-block;
+}
+
+.sub-text {
+    color: #666;
+    margin-left: 5px;
+    font-size: 11px;
+}
+
+/* =========================================
+   SECTION 4: TOAST NOTIFICATION
+   ========================================= */
+
+.toast {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    background: #1E311E;
+    border: 2px solid #32CD32;
+    color: #dfffe9;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 12px 60px 12px 16px;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out, visibility 0.4s;
+    z-index: 1000;
+}
+
+.toast.error {
+    background: #3a1c1c;
+    border-color: #ff4d4d;
+    color: #ffdede;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 4px;
+    margin-right: 15px;
+}
+
+.toast-message {
+    font-size: 13px;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+.toast-close {
+    position: absolute;
+    top: 4px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    transition: color 0.2s;
+}
+
+.toast-close:hover {
+    color: #fff;
+}
+
+/* =========================================
+   SECTION 5: TABS & DOCUMENTATION
+   ========================================= */
+
+/* Hide the actual radio buttons */
+.tab-radio {
+    display: none;
+}
+
+/* Tab Navigation Header */
+.tabs {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    margin-bottom: 20px;
+    justify-content: center;
+    z-index: 10;
+}
+
+.tab-name {
+    color: #eaeaea;
+    font-family: 'Segoe UI', sans-serif;
+    height: 30px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+/* Highlight the active tab text */
+#tab1:checked ~ .tabs label[for="tab1"],
+#tab2:checked ~ .tabs label[for="tab2"]  {
+    color: var(--pink);
+    text-decoration: underline;
+    font-weight: 200;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/* Hide content by default */
+.tab-content {
+    display: none;
+}
+
+/* Show content when radio is checked */
+.tab-radio:checked + .tab-name + .tab-content {
+    display: block;
+}
+
+/* How To Content Styling --- */
+.how-to-content {
+    background: var(--panel);
+    border-radius: 8px;
+    padding: 20px;
+    line-height: 1.8;
+    height: 450px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* Custom Scrollbar for How-To */
+.how-to-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.how-to-content::-webkit-scrollbar-track {
+    background: #0a0a0a;
+    border-radius: 10px;
+    margin: 5px 0;
+}
+
+.how-to-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--pink), var(--pink-dark));
+    border-radius: 10px;
+    border: 2px solid #1a1a1a;
+    transition: 0.3s;
+}
+
+.how-to-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ffb3dc, var(--pink));
+    box-shadow: 0 0 10px rgba(255, 138, 203, 0.5);
+}
+
+.how-to-content h2 {
+    color: var(--pink);
+    margin-top: 30px;
+}
+
+.how-to-content h2:first-of-type {
+    margin-top: 0;
+}

@@ -1,4 +1,4 @@
-import numpy as np
+from services.entry import orthonormalize_from_json
 from flask import Blueprint, request, jsonify
 from orthobasis.basis import orthonormalize
 from orthobasis.exceptions import InvalidVectorSetError, DependentVectorSetError
@@ -14,18 +14,8 @@ def get_orthonormalization():
         if not data:
             return jsonify({"error": "No data provided"}), 400
 
-        # Convert to Numpy Array
-        matrix = np.array(data, dtype=np.float64)
-
-        # Transpose
-        matrix_columns = matrix.T
-
-        # Compute
-        # Calls gram_schmidt + normalize logic
-        result_matrix = orthonormalize(matrix_columns)
-
         # Format Response to Transpose Back
-        response_data = result_matrix.T.tolist()
+        response_data = orthonormalize_from_json(data)
 
         return jsonify(response_data)
 

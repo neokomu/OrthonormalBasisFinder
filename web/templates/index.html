@@ -13,23 +13,25 @@
 
     <div class="controls">
         <div class="control-box">
-            <div class="label">Number of Vectors</div>
+            <label class="label" for="numVectors">Number of Vectors</label>
             <div class="counter">
-                <button onclick="changeVectors(-1)">−</button>
-                <span id="numVectors">0</span>
-                <button onclick="changeVectors(1)">+</button>
+                <button onclick="changeVectors(-1)" id="btnDecVectors">−</button>
+                <input type="number" id="numVectors" value="0" min="0" class="counter-input">
+                <button onclick="changeVectors(1)" id="btnIncVectors">+</button>
             </div>
         </div>
 
         <div class="control-box">
-            <div class="label">Size of Vectors</div>
+            <label class="label" for="vectorSize">Size of Vectors</label>
             <div class="counter">
-                <button onclick="changeSize(-1)">−</button>
-                <span id="vectorSize">0</span>
-                <button onclick="changeSize(1)">+</button>
+                <button onclick="changeSize(-1)" id="btnDecSize">−</button>
+                <input type="number" id="vectorSize" value="0" min="0" class="counter-input">
+                <button onclick="changeSize(1)" id="btnIncSize">+</button>
             </div>
         </div>
     </div>
+
+    <div class="label">Vector Input</div>
 
     <div class="vector-input" id="vectorInput">
         No input detected
@@ -41,17 +43,41 @@
 
     <!-- OUTPUT -->
     <div class="output">
-        <div class="output-header">Computation Output</div>
+        <div class="label">Computation Output</div>
 
-        <div id="results-container" style="margin-bottom: 15px; padding: 10px; background: #222; border-radius: 5px;"></div>
+        <div id="results-container" class="vector-input" style="min-height: auto; margin-bottom: 15px;"></div>
 
-        <div class="graph-area" id="graphArea">
-            graph here
-        </div>
+        <div class="graph-area" id="graphAreaWrapper">
 
-        <div class="output-footer">
+            <div id="graphPlot">
+                graph here
+            </div>
+
             <button class="reset-btn" onclick="resetView()">Reset View</button>
+
+            <div class="legend-box">
+                <div class="legend-title">Vectors</div>
+
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #ff4d4d;"></span>
+                    v1 <span class="sub-text">(Original)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #ffa600;"></span>
+                    v2 <span class="sub-text">(Original)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #32CD32;"></span>
+                    u1 <span class="sub-text">(Orthonormal)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: #800080;"></span>
+                    u2 <span class="sub-text">(Orthonormal)</span>
+                </div>
+            </div>
+
         </div>
+
     </div>
 </div>
 

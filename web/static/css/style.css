@@ -5,6 +5,7 @@
    2. Style the Control Cards and Stepper Buttons.
    3. Handle "Absolute Positioning" for the graph overlays (Legend/Reset).
    4. Style the Toast Notification.
+   5. Style Tabs & Documentation (How-To Section).
 */
 
 /* =========================================
@@ -50,6 +51,8 @@ h1 {
     color: var(--pink);
     margin-bottom: 25px;
     letter-spacing: 1px;
+    /* Optical alignment fix */
+    margin-right: 5px;
 }
 
 /* =========================================
@@ -169,6 +172,7 @@ h1 {
     transition: all 0.2s ease-in-out;
 }
 
+/* Interactive Input States */
 .vector input:hover {
     border-color: #fff;
     background: #2a2a2a;
@@ -194,6 +198,7 @@ h1 {
     color: #bbb;
     cursor: not-allowed;
     margin-bottom: 20px;
+    transition: background 0.2s;
 }
 
 .compute-btn.active {
@@ -201,6 +206,17 @@ h1 {
     color: white;
     font-weight: bold;
     cursor: pointer;
+}
+
+.compute-btn.active:hover {
+    background: #ffb3dc;
+    box-shadow: 0 0 15px rgba(255, 138, 203, 0.4);
+    transform: translateY(-1px);
+}
+
+.compute-btn.active:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 5px rgba(255, 138, 203, 0.4);
 }
 
 /* =========================================
@@ -240,7 +256,6 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #555;
 }
 
 .reset-btn {
@@ -267,7 +282,6 @@ h1 {
     bottom: 15px;
     left: 15px;
     z-index: 10;
-
     background: rgba(26, 26, 26, 0.9);
     border: 1px solid #333;
     border-radius: 8px;
@@ -333,7 +347,7 @@ h1 {
 .toast.show {
     visibility: visible;
     opacity: 1;
-    transform: translateY(0); /* Slides back to original position */
+    transform: translateY(0);
 }
 
 .toast-title {
@@ -362,4 +376,96 @@ h1 {
 
 .toast-close:hover {
     color: #fff;
+}
+
+/* =========================================
+   SECTION 5: TABS & DOCUMENTATION
+   ========================================= */
+
+/* Hide the actual radio buttons */
+.tab-radio {
+    display: none;
+}
+
+/* Tab Navigation Header */
+.tabs {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    margin-bottom: 20px;
+    justify-content: center;
+    z-index: 10;
+}
+
+.tab-name {
+    color: #eaeaea;
+    font-family: 'Segoe UI', sans-serif;
+    height: 30px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+/* Highlight the active tab text */
+#tab1:checked ~ .tabs label[for="tab1"],
+#tab2:checked ~ .tabs label[for="tab2"]  {
+    color: var(--pink);
+    text-decoration: underline;
+    font-weight: 200;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/* Hide content by default */
+.tab-content {
+    display: none;
+}
+
+/* Show content when radio is checked */
+.tab-radio:checked + .tab-name + .tab-content {
+    display: block;
+}
+
+/* How To Content Styling --- */
+.how-to-content {
+    background: var(--panel);
+    border-radius: 8px;
+    padding: 20px;
+    line-height: 1.8;
+    height: 450px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* Custom Scrollbar for How-To */
+.how-to-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.how-to-content::-webkit-scrollbar-track {
+    background: #0a0a0a;
+    border-radius: 10px;
+    margin: 5px 0;
+}
+
+.how-to-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--pink), var(--pink-dark));
+    border-radius: 10px;
+    border: 2px solid #1a1a1a;
+    transition: 0.3s;
+}
+
+.how-to-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ffb3dc, var(--pink));
+    box-shadow: 0 0 10px rgba(255, 138, 203, 0.5);
+}
+
+.how-to-content h2 {
+    color: var(--pink);
+    margin-top: 30px;
+}
+
+.how-to-content h2:first-of-type {
+    margin-top: 0;
 }

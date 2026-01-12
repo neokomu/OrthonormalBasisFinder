@@ -9,79 +9,106 @@
 <body>
 
 <div class="container">
-    <h1>Orthonormal Basis Finder</h1>
 
-    <div class="controls">
-        <div class="control-box">
-            <label class="label" for="numVectors">Number of Vectors</label>
-            <div class="counter">
-                <button onclick="changeVectors(-1)" id="btnDecVectors">−</button>
-                <input type="number" id="numVectors" value="0" min="0" class="counter-input">
-                <button onclick="changeVectors(1)" id="btnIncVectors">+</button>
-            </div>
-        </div>
+    <input type="radio" name="option" id="tab1" class="tab-radio" checked onclick="showTab('tab1')"/>
+    <input type="radio" name="option" id="tab2" class="tab-radio" onclick="showTab('tab2')">
 
-        <div class="control-box">
-            <label class="label" for="vectorSize">Size of Vectors</label>
-            <div class="counter">
-                <button onclick="changeSize(-1)" id="btnDecSize">−</button>
-                <input type="number" id="vectorSize" value="0" min="0" class="counter-input">
-                <button onclick="changeSize(1)" id="btnIncSize">+</button>
-            </div>
-        </div>
+    <div class="tabs">
+        <label for="tab1" class="tab-name">Orthonormal Basis Finder</label>
+        <label for="tab2" class="tab-name">How To Use</label>
     </div>
 
-    <div class="label">Vector Input</div>
+    <div id="content1" class="tab-content" style="display: block;">
 
-    <div class="vector-input" id="vectorInput">
-        No input detected
-    </div>
+        <h1>Orthonormal Basis Finder</h1>
 
-    <button class="compute-btn" id="computeBtn">
-        COMPUTE
-    </button>
-
-    <!-- OUTPUT -->
-    <div class="output">
-        <div class="label">Computation Output</div>
-
-        <div id="results-container" class="vector-input" style="min-height: auto; margin-bottom: 15px;"></div>
-
-        <div class="graph-area" id="graphAreaWrapper">
-
-            <div id="graphPlot">
-                graph here
+        <div class="controls">
+            <div class="control-box">
+                <label class="label" for="numVectors">Number of Vectors</label>
+                <div class="counter">
+                    <button onclick="changeVectors(-1)" id="btnDecVectors">−</button>
+                    <input type="number" id="numVectors" value="0" min="0" class="counter-input">
+                    <button onclick="changeVectors(1)" id="btnIncVectors">+</button>
+                </div>
             </div>
 
-            <button class="reset-btn" onclick="resetView()">Reset View</button>
+            <div class="control-box">
+                <label class="label" for="vectorSize">Size of Vectors</label>
+                <div class="counter">
+                    <button onclick="changeSize(-1)" id="btnDecSize">−</button>
+                    <input type="number" id="vectorSize" value="0" min="0" class="counter-input">
+                    <button onclick="changeSize(1)" id="btnIncSize">+</button>
+                </div>
+            </div>
+        </div>
 
-            <div class="legend-box">
-                <div class="legend-title">Vectors</div>
+        <div class="label">Vector Input</div>
 
-                <div class="legend-item">
-                    <span class="legend-color" style="background: #ff4d4d;"></span>
-                    v1 <span class="sub-text">(Original)</span>
+        <div class="vector-input" id="vectorInput">
+            No input detected
+        </div>
+
+        <button class="compute-btn" id="computeBtn">
+            COMPUTE
+        </button>
+
+        <div class="output">
+            <div class="label">Computation Output</div>
+
+            <div id="results-container" class="vector-input" style="min-height: auto; margin-bottom: 15px;"></div>
+
+            <div class="graph-area" id="graphAreaWrapper">
+
+                <div id="graphPlot">
+                    graph here
                 </div>
-                <div class="legend-item">
-                    <span class="legend-color" style="background: #ffa600;"></span>
-                    v2 <span class="sub-text">(Original)</span>
+
+                <button class="reset-btn" onclick="resetView()">Reset View</button>
+
+                <div class="legend-box">
+                    <div class="legend-title">Vectors</div>
+
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #ff4d4d;"></span>
+                        v1 <span class="sub-text">(Original)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #ffa600;"></span>
+                        v2 <span class="sub-text">(Original)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #32CD32;"></span>
+                        u1 <span class="sub-text">(Orthonormal)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #800080;"></span>
+                        u2 <span class="sub-text">(Orthonormal)</span>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-color" style="background: #32CD32;"></span>
-                    u1 <span class="sub-text">(Orthonormal)</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-color" style="background: #800080;"></span>
-                    u2 <span class="sub-text">(Orthonormal)</span>
-                </div>
+
             </div>
 
         </div>
 
+    </div> <div id="content2" class="tab-content">
+    <h1>How To Use</h1>
+    <div class="how-to-content">
+        <h2>Getting Started</h2>
+        <p>This Orthonormal Basis Finder tool helps you find an orthonormal basis from a set of vectors using the Gram-Schmidt process.</p>
+
+        <h2>Step-by-Step Instructions</h2>
+        <p><strong>1. Choose the number of Vectors:</strong> Use the + and − buttons to select how many vectors you want to input.</p>
+        <p><strong>2. Set the Dimension of Vectors:</strong> Choose the dimension of your vectors (e.g., 2 for 2D, 3 for 3D).</p>
+        <p><strong>3. Enter Your Vector Values:</strong> Input fields will appear based on your selection. Enter <b>numerical values only</b>.</p>
+        <p><strong>4. Run the Computation:</strong> Click COMPUTE to apply the Gram-Schmidt orthogonalization.</p>
+        <p><strong>5. View Results:</strong> The orthonormal basis will be displayed in the output section.</p>
+
+        <h2>Example</h2>
+        <p>If you entered two 2D vectors [3, 2] and [2, 1], this tool will compute an orthonormal basis using Gram-Schmidt process.</p>
     </div>
 </div>
 
-<div class="toast" id="toast">
+</div> <div class="toast" id="toast">
     <span class="toast-close" id="closeToastBtn">&times;</span>
     <div class="toast-title"></div>
     <div class="toast-message"></div>

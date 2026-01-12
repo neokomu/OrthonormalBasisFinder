@@ -322,7 +322,24 @@ function resetView() {
 }
 
 /* =========================================
-   SECTION 5: PAGE LOAD RESET
+   SECTION 5: TAB SWITCHING LOGIC
+   ========================================= */
+
+function showTab(tabId) {
+    // Hide both tabs
+    document.getElementById('content1').style.display = 'none';
+    document.getElementById('content2').style.display = 'none';
+
+    // Show the selected tab
+    if (tabId === 'tab1') {
+        document.getElementById('content1').style.display = 'block';
+    } else if (tabId === 'tab2') {
+        document.getElementById('content2').style.display = 'block';
+    }
+}
+
+/* =========================================
+   SECTION 6: PAGE LOAD RESET
    ========================================= */
 
 window.addEventListener("load", () => {

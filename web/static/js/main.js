@@ -310,6 +310,7 @@ computeBtn.addEventListener("click", async () => {
         showToast("Computation complete", "The graph output can be seen below.", false);
     } catch (error) {
         console.error("Error:", error);
+        document.querySelector(".output").style.display = "none";
         showToast("Invalid input", "The vectors are linearly dependent.", true);
     }
 });

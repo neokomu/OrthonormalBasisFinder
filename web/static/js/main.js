@@ -1,5 +1,4 @@
 /**
- * MEMBER A: LOGIC & INTEGRATION
  * File: main.js
  * ----------------------------------------
  * Updates based on UI Design:
@@ -11,59 +10,93 @@
 /* =========================================
    SECTION 1: STATE MANAGEMENT
    ========================================= */
-// TODO: Initialize State
-// let state = {
-//    numVectors: 2,  // Default as seen in UI
-//    vectorDim: 3    // Default as seen in UI
-// };
 
-// TODO: Define Limits
-// const MAX_VECTORS = 7;
-// const MAX_DIM = 7;
-// const MIN_VAL = 1;
+let numVectors = 0;
+let vectorSize = 0;
+
+const numVectorsSpan = document.getElementById("numVectors");
+const vectorSizeSpan = document.getElementById("vectorSize");
+const vectorInputDiv = document.getElementById("vectorInput");
+const computeBtn = document.getElementById("computeBtn");
+const toast = document.getElementById("toast");
+
 
 /* =========================================
    SECTION 2: COUNTER LOGIC
    ========================================= */
 
 // --- Function: Update Counters ---
-// TODO: Select elements: 
-//    - "Number of Vectors" (+) and (-) buttons and display span.
-//    - "Size of Vectors" (+) and (-) buttons and display span.
 
-// TODO: Add Event Listeners for "Number of Vectors":
-//    - On (+): Increment state.numVectors (if < MAX). Update display. Call renderInputs().
-//    - On (-): Decrement state.numVectors (if > MIN). Update display. Call renderInputs().
+function changeVectors(delta) {
+    numVectors = Math.max(0, numVectors + delta);
+    numVectorsSpan.textContent = numVectors;
+    renderInputs();
+}
 
-// TODO: Add Event Listeners for "Size of Vectors":
-//    - On (+): Increment state.vectorDim (if < MAX). Update display. Call renderInputs().
-//    - On (-): Decrement state.vectorDim (if > MIN). Update display. Call renderInputs().
+function changeSize(delta) {
+    vectorSize = Math.max(0, vectorSize + delta);
+    vectorSizeSpan.textContent = vectorSize;
+    renderInputs();
+}
+
 
 /* =========================================
    SECTION 3: GRID GENERATION
    ========================================= */
 
 // --- Function: Render Inputs (The Grid) ---
-// TODO: Clear the current #vector-input-container.
-// TODO: Loop from i = 0 to state.numVectors (Rows):
-//       - Create a Row container (flexbox).
-//       - Add label "v{i+1}".
-//       - Loop from j = 0 to state.vectorDim (Cols):
-//             - Create <input type="number">.
-//             - Set placeholder or default value.
-//             - Append input to Row.
-//       - Append Row to Container.
+
+function renderInputs() {
+    vectorInputDiv.innerHTML = "";
+
+    if (numVectors === 0 || vectorSize === 0) {
+        vectorInputDiv.textContent = "No input detected";
+        computeBtn.classList.remove("active");
+        return;
+    }
+
+    for (let i = 0; i < numVectors; i++) {
+        const row = document.createElement("div");
+        row.className = "vector";
+
+        for (let j = 0; j < vectorSize; j++) {
+            const input = document.createElement("input");
+            input.type = "number";
+            input.addEventListener("input", validateInput);
+            row.appendChild(input);
+        }
+        vectorInputDiv.appendChild(row);
+    }
+
+    validateInput();
+}
+
 
 /* =========================================
    SECTION 4: API & OUTPUT
    ========================================= */
 
-// --- Function: Collect Data ---
-// TODO: Iterate through rows and cols to build the matrix: [[x,y,z], [x,y,z]...]
+function validateInput() {
+    const inputs = vectorInputDiv.querySelectorAll("input");
+    let allFilled = true;
 
-// --- Function: Handle Response ---
-// TODO: On success:
-//       1. Populate the "Result Vectors" display area (text boxes above graph).
-//       2. Call Member B's graph rendering function.
-//       3. Show the "Computation Complete" green toast.
-//          - Remove/Hide toast after 3 seconds or on click 'x'.
+    inputs.forEach(input => {
+        if (input.value === "") allFilled = false;
+    });
+
+    computeBtn.classList.toggle("active", allFilled && inputs.length > 0);
+}
+
+computeBtn.addEventListener("click", () => {
+    if (!computeBtn.classList.contains("active")) return;
+
+    document.querySelector(".output").style.display = "block";
+
+    toast.style.display = "block";
+    setTimeout(() => toast.style.display = "none", 3000);
+});
+
+function resetView() {
+    document.querySelector(".output").style.display = "none";
+    document.getElementById("graphArea").textContent = "graph here";
+}

@@ -1,16 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title> Orthonormal Basis Finder </title>
+    <meta charset="UTF-8">
+    <title>Orthonormal Basis Finder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-    <h1>Test</h1>
-    
-    <textarea id="input"></textarea>
-    <button id="compute">compute</button>
 
-    <pre id="output"></pre>
-    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+<body>
+
+<div class="container">
+    <h1>Orthonormal Basis Finder</h1>
+
+    <div class="controls">
+        <div class="control-box">
+            <div class="label">Number of Vectors</div>
+            <div class="counter">
+                <button onclick="changeVectors(-1)">−</button>
+                <span id="numVectors">0</span>
+                <button onclick="changeVectors(1)">+</button>
+            </div>
+        </div>
+
+        <div class="control-box">
+            <div class="label">Size of Vectors</div>
+            <div class="counter">
+                <button onclick="changeSize(-1)">−</button>
+                <span id="vectorSize">0</span>
+                <button onclick="changeSize(1)">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="vector-input" id="vectorInput">
+        No input detected
+    </div>
+
+    <button class="compute-btn" id="computeBtn">
+        COMPUTE
+    </button>
+
+    <!-- OUTPUT -->
+    <div class="output">
+        <div class="output-header">Computation Output</div>
+
+        <div class="graph-area" id="graphArea">
+            graph here
+        </div>
+
+        <div class="output-footer">
+            <button class="reset-btn" onclick="resetView()">Reset View</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">
+    Computation complete<br>
+    The graph output can be seen below.
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+
 </body>
 </html>
-    

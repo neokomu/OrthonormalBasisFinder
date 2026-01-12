@@ -1,5 +1,4 @@
 /**
- * MEMBER B: VISUALIZATION
  * File: graph.js
  * ----------------------------------------
  * Updates based on UI Design:

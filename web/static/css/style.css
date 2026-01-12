@@ -1,5 +1,4 @@
-/* MEMBER C: STYLING
-   File: style.css
+/* File: style.css
    ----------------------------------------
    Responsibilities:
    1. Define Color Variables (Dark BG, Neon Pink, etc.).
@@ -11,85 +10,185 @@
 /* =========================================
    SECTION 1: VARIABLES & RESET
    ========================================= */
+
 :root {
-    /* TODO: Define --bg-dark (Main background) */
-    /* TODO: Define --panel-bg (Card background) */
-    /* TODO: Define --neon-pink (Accent color) */
-    /* TODO: Define --text-white */
+    --bg: #1e1e1e;
+    --panel: #111;
+    --pink: #ff8acb;
+    --pink-dark: #7a4a63;
+    --text: #eaeaea;
+    --muted: #777;
+    --green: #1f7a3f;
 }
 
-/* TODO: Set body background, font-family (Courier New/Monospace), and text color. */
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 700px;
+    padding: 30px;
+    background: #1b1b1b;
+    border-radius: 12px;
+}
+
+h1 {
+    text-align: center;
+    color: var(--pink);
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
 
 /* =========================================
    SECTION 2: COMPONENT STYLES
    ========================================= */
 
-/* --- Control Cards --- */
-/* TODO: Style .control-card:
-     - Background color (lighter than body).
-     - Border radius.
-     - Flexbox layout (label on left, stepper on right).
-*/
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
 
-/* --- Stepper Buttons --- */
-/* TODO: Style (+ / -) buttons:
-     - Square shape.
-     - Neon pink background.
-     - White text.
-     - No border.
-*/
+.control-box {
+    width: 48%;
+}
 
-/* --- Compute Button --- */
-/* TODO: Style .btn-primary:
-     - Full width.
-     - Neon pink background.
-     - Bold text.
-     - Margin top/bottom.
-*/
+.label {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
 
-/* --- Input Fields --- */
-/* TODO: Style input[type="number"]:
-     - Dark background.
-     - Remove default borders.
-     - Rounded corners.
-     - Center text alignment.
-*/
+.counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--panel);
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.counter button {
+    background: var(--pink);
+    border: none;
+    color: black;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.vector-input {
+    background: var(--panel);
+    height: 200px;
+    border-radius: 8px;
+    padding: 15px;
+    overflow-y: auto;
+    color: var(--muted);
+    margin-bottom: 20px;
+}
+
+.vector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.vector input {
+    width: 250px;
+    height: 50px;
+    padding: 6px;
+    background: #222;
+    border: 1px solid #333;
+    color: var(--text);
+    border-radius: 4px;
+    text-align: center;
+}
+
+.compute-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    background: var(--pink-dark);
+    color: #bbb;
+    cursor: not-allowed;
+    margin-bottom: 20px;
+}
+
+.compute-btn.active {
+    background: var(--pink);
+    color: black;
+    cursor: pointer;
+}
 
 /* =========================================
-   SECTION 3: GRAPH OVERLAYS (Crucial)
+   SECTION 3: GRAPH OVERLAYS
    ========================================= */
 
-/* --- Graph Wrapper --- */
-/* TODO: Style .graph-wrapper:
-     - Position: relative (Important! This anchors the absolute children).
-     - Background: Very dark gray (almost black).
-     - Height: Fixed height (e.g., 500px).
-*/
+.output {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 15px;
+    display: none;
+}
 
-/* --- Reset View Button --- */
-/* TODO: Style #reset-view-btn:
-     - Position: absolute.
-     - Top: 20px, Right: 20px.
-     - Z-index: 10 (To sit on top of the canvas).
-     - Transparent/Dark background with border.
-*/
+.output-header {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: var(--muted);
+}
 
-/* --- Custom Legend --- */
-/* TODO: Style .custom-legend:
-     - Position: absolute.
-     - Bottom: 20px, Left: 20px.
-     - Z-index: 10.
-     - Semi-transparent background.
-     - Border radius.
-*/
+.graph-area {
+    height: 220px;
+    border: 1px dashed #333;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.output-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.reset-btn {
+    background: #222;
+    color: var(--text);
+    border: 1px solid #333;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
 
 /* =========================================
    SECTION 4: TOAST NOTIFICATION
    ========================================= */
-/* TODO: Style #toast-success:
-     - Position: fixed (Top-Left or Top-Center).
-     - Background: Dark Green.
-     - Border: Bright Green.
-     - Flexbox layout for text and close button.
-     - Class .hidden { display: none; }
-*/
+
+.toast {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    background: #1E311E;
+    border: 2px solid #32CD32;
+    color: #dfffe9;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+}

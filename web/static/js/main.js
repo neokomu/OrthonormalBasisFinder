@@ -64,6 +64,24 @@ function changeVectors(delta) {
     let current = parseInt(numVectorsInput.value) || 0;
     let newValue = Math.max(0, current + delta);
 
+    if (delta < 0 && newValue < numVectors) {
+        const vectorCols = vectorInputDiv.getElementsByClassName("vector");
+        const colToRemove = vectorCols[newValue];
+
+        if (colToRemove) {
+            colToRemove.classList.add('pop-out'); // Trigger CSS animation
+        }
+
+        // Update State immediately
+        numVectors = newValue;
+        numVectorsInput.value = newValue;
+        updateConstraints();
+
+        // Wait for animation
+        setTimeout(renderInputs, 250);
+        return;
+    }
+
     numVectors = newValue;
     numVectorsInput.value = newValue;
 
@@ -74,6 +92,26 @@ function changeVectors(delta) {
 function changeSize(delta) {
     let current = parseInt(vectorSizeInput.value) || 0;
     let newValue = Math.max(0, current + delta);
+
+    if (delta < 0 && newValue < vectorSize) {
+        const rows = vectorInputDiv.querySelectorAll('.vector');
+
+        rows.forEach(row => {
+            const inputToRemove = row.children[newValue + 1];
+            if (inputToRemove) {
+                inputToRemove.classList.add('pop-out');
+            }
+        });
+
+        // Update State
+        vectorSize = newValue;
+        vectorSizeInput.value = newValue;
+        updateConstraints();
+
+        // Wait for animation
+        setTimeout(renderInputs, 250);
+        return;
+    }
 
     vectorSize = newValue;
     vectorSizeInput.value = newValue;
@@ -134,12 +172,26 @@ renderInputs();
 // --- Function: Render Inputs ---
 
 function renderInputs() {
+    // Capture existing values before wiping
+    const savedValues = [];
+    const vectorDivs = vectorInputDiv.querySelectorAll(".vector");
+    vectorDivs.forEach((vecDiv) => {
+        const inputs = vecDiv.querySelectorAll("input");
+        const colVals = [];
+        inputs.forEach(inp => colVals.push(inp.value));
+        savedValues.push(colVals);
+    });
+
+    // Clear the grid
     vectorInputDiv.innerHTML = "";
 
     if (numVectors === 0 || vectorSize === 0) {
         vectorInputDiv.classList.add("empty-state");
         vectorInputDiv.textContent = "No input detected";
         computeBtn.classList.remove("active");
+        if (typeof clearBtn !== 'undefined' && clearBtn) {
+            clearBtn.classList.remove("show");
+        }
         return;
     }
 
@@ -153,12 +205,16 @@ function renderInputs() {
         const label = document.createElement("div");
         label.className = "vector-label";
         label.textContent = `v${i + 1}`;
+        if (!savedValues[i]) {
+            label.classList.add("pop-in");
+        }
         row.appendChild(label);
 
         for (let j = 0; j < vectorSize; j++) {
             const input = document.createElement("input");
             input.type = "text";
             input.inputMode = "decimal";
+            input.placeholder = "0";
 
             input.addEventListener("keydown", (e) => {
                 // Allow Navigation Keys (Backspace, Delete, Tab, Arrows, Enter)
@@ -192,6 +248,16 @@ function renderInputs() {
             });
 
             input.addEventListener("input", validateInput);
+
+            const oldVal = savedValues[i] && savedValues[i][j];
+
+            if (oldVal !== undefined) {
+                input.value = oldVal;
+            } else {
+                input.classList.add("pop-in");
+                input.style.animationDelay = `${j * 0.05}s`; // Slight ripple for new rows
+            }
+
             row.appendChild(input);
         }
         vectorInputDiv.appendChild(row);
@@ -311,13 +377,14 @@ computeBtn.addEventListener("click", async () => {
             label.textContent = `u${index + 1}`;
             row.appendChild(label);
 
-            vector.forEach(num => {
-                const input = document.createElement("input");
-                input.type = "text";
-                input.value = num.toFixed(8);
-                input.readOnly = true;
-                input.tabIndex = -1;
-                row.appendChild(input);
+            vector.forEach(num => {const box = document.createElement("div");
+                box.className = "result-box";
+                const span = document.createElement("span");
+                const valueStr = num.toFixed(8);
+                span.textContent = valueStr;
+                box.appendChild(span);
+                box.title = valueStr;
+                row.appendChild(box);
             });
             resultsContainer.appendChild(row);
         });
@@ -381,4 +448,11 @@ window.addEventListener("load", () => {
 
     // Ensure output is hidden
     document.querySelector(".output").style.display = "none";
+
+    // Force reset to the first tab
+    const tab1 = document.getElementById("tab1");
+    if (tab1) {
+        tab1.checked = true;
+        showTab('tab1');
+    }
 });

@@ -125,28 +125,29 @@ h1 {
 
 .vector-input {
     background: var(--panel);
-    height: auto;
     border-radius: 8px;
-    padding: 25px 30px 25px 10px;
     margin-bottom: 20px;
     color: var(--muted);
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
     gap: 15px;
+    padding: 15px 30px 30px 30px;
+    overflow-x: auto;
 }
 
 .vector-input.empty-state {
     min-height: 150px;
+    align-items: center;
     justify-content: center;
     padding: 20px;
 }
 
 .vector {
     display: flex;
-    align-items: center;
-    width: 100%;
+    flex-direction: column;
+    flex: 1;
+    min-width: 60px;
     gap: 15px;
 }
 
@@ -154,15 +155,14 @@ h1 {
     color: var(--text);
     font-weight: bold;
     font-size: 14px;
-    width: 30px;
-    text-align: right;
-    flex-shrink: 0;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
 }
 
 .vector input {
-    flex: 1;
-    min-width: 0;
-    height: 50px;
+    width: 100%;
+    height: 40px;
     padding: 6px;
     background: #222;
     border: 1px solid #333;
@@ -179,12 +179,37 @@ h1 {
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
-.vector input:read-only {
-    background: #2a1f25;
-    color: var(--pink);
-    border-color: #44333b;
-    cursor: default;
-    font-weight: bold;
+.vector input::placeholder {
+    color: var(--text);
+    opacity: 0.2;
+    font-weight: normal;
+}
+
+.clear-btn {
+    position: relative;
+    z-index: 10;
+    background: #222;
+    color: var(--text);
+    border: 1px solid #333;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(5px);
+    transition: all 0.3s ease;
+}
+
+.clear-btn.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.clear-btn:hover {
+    background: #333;
+    border-color: #444;
 }
 
 .compute-btn {
@@ -220,14 +245,49 @@ h1 {
 }
 
 /* =========================================
-   SECTION 3: GRAPH OVERLAYS
+   SECTION 3: SMART ANIMATION
+   ========================================= */
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.pop-in {
+    animation: popIn 0.3s cubic-bezier(0.25, 1, 0.5, 1) backwards;
+}
+
+@keyframes popOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+.pop-out {
+    animation: popOut 0.3s ease-out forwards;
+    pointer-events: none;
+}
+
+/* =========================================
+   SECTION 4: GRAPH OVERLAYS & OUTPUT WRAPPER
    ========================================= */
 
 .output {
-    background: var(--panel);
-    border-radius: 10px;
-    padding: 15px;
+    background: transparent;
+    padding: 0;
     display: none;
+    margin-top: 20px;
 }
 
 .output-header {
@@ -236,23 +296,36 @@ h1 {
     color: var(--muted);
 }
 
-.graph-area {
-    position: relative;
-    height: 350px;
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 8px;
-    margin-bottom: 10px;
+/* Results Section */
+#results-container {
+    background: var(--panel);
+    padding: 15px 30px 20px 30px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0 !important;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    color: #555;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 15px;
+    overflow-x: auto;
+    border: none;
+}
+
+/* Graph Section */
+#graphAreaWrapper {
+    background: var(--panel);
+    padding: 10px 30px 30px 30px;
+    border-radius: 0 0 8px 8px;
+    border: none;
+    height: 380px;
+    position: relative;
 }
 
 #graphPlot {
     width: 100%;
     height: 100%;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -260,8 +333,8 @@ h1 {
 
 .reset-btn {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 25px;
+    right: 45px;
     z-index: 10;
     background: #222;
     color: var(--text);
@@ -279,8 +352,8 @@ h1 {
 
 .legend-box {
     position: absolute;
-    bottom: 15px;
-    left: 15px;
+    bottom: 45px;
+    left: 45px;
     z-index: 10;
     background: rgba(26, 26, 26, 0.9);
     border: 1px solid #333;
@@ -318,7 +391,42 @@ h1 {
 }
 
 /* =========================================
-   SECTION 4: TOAST NOTIFICATION
+   SECTION 5: RESULT BOXES
+   ========================================= */
+
+.result-box {
+    width: 100%;
+    height: 40px;
+    padding: 0 6px;
+
+    background: #2a1f25;
+    color: var(--pink);
+    border: 1px solid #44333b;
+    border-radius: 4px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    user-select: all;
+    cursor: text;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.result-box::-webkit-scrollbar {
+    display: none;
+}
+
+.result-box span {
+    margin: auto;
+}
+
+/* =========================================
+   SECTION 6: TOAST NOTIFICATION
    ========================================= */
 
 .toast {
@@ -379,7 +487,7 @@ h1 {
 }
 
 /* =========================================
-   SECTION 5: TABS & DOCUMENTATION
+   SECTION 7: TABS & DOCUMENTATION
    ========================================= */
 
 /* Hide the actual radio buttons */
@@ -405,6 +513,13 @@ h1 {
     box-sizing: border-box;
     cursor: pointer;
     transition: 0.25s;
+}
+
+.tab-name:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
 }
 
 /* Highlight the active tab text */

@@ -42,7 +42,10 @@
             </div>
         </div>
 
-        <div class="label">Vector Input</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; min-height: 25px;">
+            <div class="label" style="margin-bottom: 0;">Vector Input</div>
+            <button id="clearBtn" class="clear-btn">Clear Inputs</button>
+        </div>
 
         <div class="vector-input" id="vectorInput">
             No input detected
@@ -55,7 +58,7 @@
         <div class="output">
             <div class="label">Computation Output</div>
 
-            <div id="results-container" class="vector-input" style="min-height: auto; margin-bottom: 15px;"></div>
+            <div id="results-container" class="vector-input" style="min-height: auto;"></div>
 
             <div class="graph-area" id="graphAreaWrapper">
 

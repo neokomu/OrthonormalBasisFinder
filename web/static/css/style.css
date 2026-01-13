@@ -179,22 +179,6 @@ h1 {
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
-.vector input:read-only {
-    background: #2a1f25;
-    color: var(--pink);
-    border-color: #44333b;
-    cursor: default;
-    font-weight: bold;
-    caret-color: transparent;
-}
-
-.vector input:read-only:focus {
-    border-color: #44333b;
-    background: #2a1f25;
-    box-shadow: none;
-    outline: none;
-}
-
 .vector input::placeholder {
     color: var(--text);
     opacity: 0.2;

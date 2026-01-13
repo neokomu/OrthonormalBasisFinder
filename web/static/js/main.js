@@ -377,7 +377,8 @@ computeBtn.addEventListener("click", async () => {
             label.textContent = `u${index + 1}`;
             row.appendChild(label);
 
-            vector.forEach(num => {const box = document.createElement("div");
+            vector.forEach(num => {
+                const box = document.createElement("div");
                 box.className = "result-box";
                 const span = document.createElement("span");
                 const valueStr = num.toFixed(8);

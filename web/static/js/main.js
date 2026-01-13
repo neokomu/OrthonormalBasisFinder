@@ -17,6 +17,7 @@ let vectorSize = 0;
 const numVectorsInput = document.getElementById("numVectors");
 const vectorSizeInput = document.getElementById("vectorSize");
 const vectorInputDiv = document.getElementById("vectorInput");
+const clearBtn = document.getElementById("clearBtn");
 const computeBtn = document.getElementById("computeBtn");
 const toast = document.getElementById("toast");
 const closeToastBtn = document.getElementById("closeToastBtn");
@@ -235,14 +236,35 @@ if (closeToastBtn) {
 function validateInput() {
     const inputs = vectorInputDiv.querySelectorAll("input");
     let allFilled = true;
+    let hasAnyInput = false;
 
     inputs.forEach(input => {
-        if (input.value === "" || input.value === "-" || input.value === ".") {
+        const val = input.value.trim();
+        if (val === "" || val === "-" || val === ".") {
             allFilled = false;
+        }
+        if (val !== "") {
+            hasAnyInput = true;
         }
     });
 
+    if (clearBtn) {
+        clearBtn.classList.toggle("show", hasAnyInput);
+    }
     computeBtn.classList.toggle("active", allFilled && inputs.length > 0);
+}
+
+if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+        const inputs = vectorInputDiv.querySelectorAll("input");
+        inputs.forEach(input => {
+            input.value = ""; // Wipe the text
+            input.style.borderColor = "#333"; // Reset any red borders
+        });
+
+        // Re-validate to update button states (disable Clear, disable Compute)
+        validateInput();
+    });
 }
 
 computeBtn.addEventListener("click", async () => {
@@ -292,8 +314,9 @@ computeBtn.addEventListener("click", async () => {
             vector.forEach(num => {
                 const input = document.createElement("input");
                 input.type = "text";
-                input.value = num.toFixed(4);
+                input.value = num.toFixed(8);
                 input.readOnly = true;
+                input.tabIndex = -1;
                 row.appendChild(input);
             });
             resultsContainer.appendChild(row);

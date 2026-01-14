@@ -4,18 +4,33 @@ from orthobasis.exceptions import (
     DependentVectorSetError,
     InvalidVectorSetError
 )
+from services.plot import create_plots
 
 def orthonormalize_from_json(data):
     """
     Input: List[List[float]]  (row-wise)
     Output: List[List[float]] (row-wise)
     """
+    # print(f"data passed: {data}") # checks
 
     matrix = np.array(data, dtype=np.float64)
-    t_matrix = matrix.T
+    
+    # print(f"nparray : {matrix}") # checks
+    # print(f"pre-processing shape : {matrix.shape}") # checks
 
+    t_matrix = matrix.T
     t_result = orthonormalize(t_matrix)
 
-    result = t_result.T
+    # plot it
+    plots = create_plots(t_result)
+    
+    o_result = t_result.T # transpose back 
+    o_result_list = o_result.tolist() # to list
 
-    return result.tolist()
+    # compile data to list
+    list_result = []
+    
+    list_result.append(o_result_list) # [0]
+    list_result.append(plots) # [1]
+    
+    return list_result

@@ -278,9 +278,10 @@ computeBtn.addEventListener("click", async () => {
         // Clear previous results
         const resultsContainer = document.getElementById("results-container");
         resultsContainer.innerHTML = "";
+        console.log("TYPE:", Array.isArray(data), data);
 
         // Loop through the result vectors and display
-        data.forEach((vector, index) => {
+        data.vectors.forEach((vector, index) => {
             const row = document.createElement("div");
             row.className = "vector";
 

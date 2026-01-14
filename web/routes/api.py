@@ -1,6 +1,5 @@
 from services.entry import orthonormalize_from_json
 from flask import Blueprint, request, jsonify
-from orthobasis.basis import orthonormalize
 from orthobasis.exceptions import InvalidVectorSetError, DependentVectorSetError
 
 api_bp = Blueprint("api", __name__)
@@ -15,9 +14,23 @@ def get_orthonormalization():
             return jsonify({"error": "No data provided"}), 400
 
         # Format Response to Transpose Back
-        response_data = orthonormalize_from_json(data)
+        result = orthonormalize_from_json(data)
+    
+        # unpack list
+        # resulting basis
+        vectors = result[0]
 
-        return jsonify(response_data)
+        # figures
+        figs = result[1]
+        fig_2d = figs[0]
+        fig_3d = figs[1]
+        
+        # to JSON
+        return jsonify({
+        "vectors": vectors,
+        "fig2d": fig_2d.to_json(),
+        "fig3d": fig_3d.to_json()
+        })
 
     except DependentVectorSetError as e:
         return jsonify({"error": str(e)}), 400

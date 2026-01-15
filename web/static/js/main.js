@@ -230,7 +230,15 @@ function renderInputs() {
                 // Allow Single Decimal Point
                 if (e.key === "." && !input.value.includes(".")) return;
 
-                // Allow Single Negative Sign (Only at the start)
+                // Allow Single Forward Slash (for fractions)
+                if (e.key === "/") {
+                    // Only allow one slash
+                    if (!input.value.includes("/")) {
+                        return;
+                    }
+                }
+
+                // Allow Single Negative Sign (only at the start)
                 if (e.key === "-") {
                     if (!input.value.includes("-") && input.selectionStart === 0) {
                         return;
@@ -242,7 +250,8 @@ function renderInputs() {
             // Block pasting of invalid text
             input.addEventListener("paste", (e) => {
                 const pasteData = (e.clipboardData || window.clipboardData).getData('text');
-                if (!/^-?\d*\.?\d*$/.test(pasteData)) {
+                // Allows negatives, decimals, and fractions
+                if (!/^-?\d*\.?\d*(\/-?\d*\.?\d*)?$/.test(pasteData)) {
                     e.preventDefault();
                 }
             });
@@ -306,7 +315,7 @@ function validateInput() {
 
     inputs.forEach(input => {
         const val = input.value.trim();
-        if (val === "" || val === "-" || val === ".") {
+        if (val === "" || val === "-" || val === "." || val === "/" || val.endsWith("/")) {
             allFilled = false;
         }
         if (val !== "") {
@@ -336,38 +345,57 @@ if (clearBtn) {
 computeBtn.addEventListener("click", async () => {
     if (!computeBtn.classList.contains("active")) return;
 
-    // Gather Data from HTML Inputs
+    // Gather Data
     const vectorRows = vectorInputDiv.querySelectorAll(".vector");
     const payload = [];
-    vectorRows.forEach(row => {
+
+    // Loop to 'return' (stop) immediately on error
+    for (const row of vectorRows) {
         const inputs = row.querySelectorAll("input");
         const vectorValues = [];
-        inputs.forEach(input => {
-            // Convert string input to Float
-            vectorValues.push(parseFloat(input.value));
-        });
+
+        for (const input of inputs) {
+            const val = input.value;
+            let numberValue;
+
+            if (val.includes("/")) {
+                const parts = val.split("/");
+                const numerator = parseFloat(parts[0]); // Handles "1" in "1/0"
+                const denominator = parseFloat(parts[1]); // Handles "0"
+
+                if (denominator === 0) {
+                    document.querySelector(".output").style.display = "none";
+                    showToast("Invalid input", "Division by zero is not valid input.", true);
+                    input.focus(); // Highlight the bad input
+                    return;
+                }
+                numberValue = numerator / denominator;
+            } else {
+                numberValue = parseFloat(val);
+            }
+            vectorValues.push(numberValue);
+        }
+        // Add the finished row to the payload
         payload.push(vectorValues);
-    });
+    }
 
     // Send Request to Flask
     try {
         const response = await fetch('/api/orthonormalize', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
 
         const data = await response.json();
 
-        if (!response.ok) {throw new Error(data.error || "Computation failed");}
+        if (!response.ok) { throw new Error(data.error || "Computation failed"); }
 
         // Clear previous results
         const resultsContainer = document.getElementById("results-container");
         resultsContainer.innerHTML = "";
 
-        // Loop through the result vectors and display
+        // Render Results
         data.forEach((vector, index) => {
             const row = document.createElement("div");
             row.className = "vector";
@@ -390,15 +418,16 @@ computeBtn.addEventListener("click", async () => {
             resultsContainer.appendChild(row);
         });
 
-        // Success Handling
+        // Show Output
         const outputDiv = document.querySelector(".output");
         outputDiv.style.display = "block";
-        // Smart scrolling
+
         const rect = outputDiv.getBoundingClientRect();
         if (rect.top > 150) {
             outputDiv.scrollIntoView({ behavior: "smooth", block: "start" });
         }
         showToast("Computation complete", "The graph output can be seen below.", false);
+
     } catch (error) {
         console.error("Error:", error);
         document.querySelector(".output").style.display = "none";
@@ -414,19 +443,19 @@ function resetView() {
 }
 
 /* =========================================
-   SECTION 5: TAB SWITCHING LOGIC
+   SECTION 5: VIEW SWITCHING LOGIC
    ========================================= */
 
-function showTab(tabId) {
-    // Hide both tabs
-    document.getElementById('content1').style.display = 'none';
-    document.getElementById('content2').style.display = 'none';
+function switchView(viewName) {
+    const mainView = document.getElementById('view-main');
+    const howtoView = document.getElementById('view-howto');
 
-    // Show the selected tab
-    if (tabId === 'tab1') {
-        document.getElementById('content1').style.display = 'block';
-    } else if (tabId === 'tab2') {
-        document.getElementById('content2').style.display = 'block';
+    if (viewName === 'main') {
+        mainView.style.display = 'block';
+        howtoView.style.display = 'none';
+    } else {
+        mainView.style.display = 'none';
+        howtoView.style.display = 'block';
     }
 }
 
@@ -450,10 +479,6 @@ window.addEventListener("load", () => {
     // Ensure output is hidden
     document.querySelector(".output").style.display = "none";
 
-    // Force reset to the first tab
-    const tab1 = document.getElementById("tab1");
-    if (tab1) {
-        tab1.checked = true;
-        showTab('tab1');
-    }
+    // Force reset to the main view
+    switchView('main');
 });

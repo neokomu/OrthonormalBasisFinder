@@ -1,10 +1,10 @@
 import numpy as np
-from orthobasis.basis import orthonormalize
-from orthobasis.exceptions import (
+from src.orthobasis.basis import orthonormalize
+from src.orthobasis.exceptions import (
     DependentVectorSetError,
     InvalidVectorSetError
 )
-from services.plot import create_plots
+from .plot import create_plots
 
 def orthonormalize_from_json(data):
     """

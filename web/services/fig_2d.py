@@ -29,9 +29,9 @@ def draw_2d(
 
         if is_line:
             norm = np.linalg.norm([vx, vy])
-
-            if norm < 1e-12:
-                raise ValueError("Zero vector cannot span a line")
+            
+            # if norm < 1e-12: {DEPRECATED}
+            #     raise ValueError("Zero vector cannot span a line")
 
             radius = max(1.5 * norm, 1.0)
             t_max = radius / norm

@@ -1,8 +1,8 @@
 import numpy as np
 import plotly.graph_objects as go
-import orthobasis as ob
-from services.fig_2d import draw_2d
-from services.fig_3d import draw_3d
+import src.orthobasis as ob
+from .fig_2d import draw_2d
+from .fig_3d import draw_3d
 
 # SERVICES: extra things that arent part of the package
 
@@ -68,7 +68,7 @@ def to_2d(vectors: np.ndarray) -> np.ndarray:
     """Downscale or upscale to 2D"""
     cols = vectors.shape[1]
     rows = vectors.shape[0]
-    
+
     # make base matrix
     proj_mat = np.zeros((2, cols)) # just either less than or equal to 2
     to_copy_rows = min(rows, 2)

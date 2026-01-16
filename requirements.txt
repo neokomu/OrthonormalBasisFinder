@@ -5,8 +5,10 @@ Flask==3.1.2
 itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.3
+narwhals==2.15.0
 numpy==2.4.0
--e git+https://github.com/effytamine/OrthonomalBasisFinder.git@23d7d0a00f817507385a9111b18db82e4efbc3cd#egg=orthobasis
+packaging==25.0
+plotly==6.5.1
 setuptools==80.9.0
 Werkzeug==3.1.5
 wheel==0.45.1

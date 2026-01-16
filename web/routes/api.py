@@ -1,6 +1,6 @@
-from services.entry import orthonormalize_from_json
+from ..services.entry import orthonormalize_from_json
 from flask import Blueprint, request, jsonify
-from orthobasis.exceptions import InvalidVectorSetError, DependentVectorSetError
+from src.orthobasis.exceptions import InvalidVectorSetError, DependentVectorSetError
 
 api_bp = Blueprint("api", __name__)
 

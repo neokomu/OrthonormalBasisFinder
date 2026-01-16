@@ -2,11 +2,7 @@ import numpy as np
 import orthobasis as ob
 
 def main():
-    vectors = np.array([
-                        [1, 3, 5],
-                        [4, 7, 4],
-                        [8, 3, 3]
-                        ], dtype = np.float64)
+    vectors = [np.array([1,4,2]), np.array([-4,7,21])]
     
     v_result = ob.orthonormalize(vectors)
     print(v_result)

@@ -1,6 +1,5 @@
-import numpy as np
+from services.entry import orthonormalize_from_json
 from flask import Blueprint, request, jsonify
-from orthobasis.basis import orthonormalize
 from orthobasis.exceptions import InvalidVectorSetError, DependentVectorSetError
 
 api_bp = Blueprint("api", __name__)
@@ -14,20 +13,25 @@ def get_orthonormalization():
         if not data:
             return jsonify({"error": "No data provided"}), 400
 
-        # Convert to Numpy Array
-        matrix = np.array(data, dtype=np.float64)
+        # Service entry point from the main repo
+        # This handles the math and generates the Plotly figures
+        result = orthonormalize_from_json(data)
 
-        # Transpose
-        matrix_columns = matrix.T
+        # unpack list
+        # resulting basis
+        vectors = result[0]
 
-        # Compute
-        # Calls gram_schmidt + normalize logic
-        result_matrix = orthonormalize(matrix_columns)
+        # figures
+        figs = result[1]
+        fig_2d = figs[0]
+        fig_3d = figs[1]
 
-        # Format Response to Transpose Back
-        response_data = result_matrix.T.tolist()
-
-        return jsonify(response_data)
+        # Return a structured JSON response
+        return jsonify({
+            "vectors": vectors,         # For result boxes
+            "fig2d": fig_2d.to_json(),  # For the graph
+            "fig3d": fig_3d.to_json()   # For the graph
+        })
 
     except DependentVectorSetError as e:
         return jsonify({"error": str(e)}), 400

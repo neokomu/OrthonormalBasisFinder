@@ -6,9 +6,18 @@ import numpy as np
 
 TOLERANCE = 1e-10
 
+def is_scalar(vectors: np.ndarray) -> bool:
+    if vectors.shape == (1, 1):
+        return True
+    else:
+        return False
+
 def is_linearly_independent(vectors: np.ndarray) -> bool:
     """Check linear independence of a matrix"""
+    # print(f"is_lin : shape : {vectors.shape}")
     rank = np.linalg.matrix_rank(vectors)
+    # print(f"is_lin : rank{rank}")
+    # print(rank == vectors.shape[1])
     return rank == vectors.shape[1]
     
 def are_orthogonal(v_1: np.ndarray, v_2: np.ndarray) -> bool:

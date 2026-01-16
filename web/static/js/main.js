@@ -396,7 +396,7 @@ computeBtn.addEventListener("click", async () => {
         resultsContainer.innerHTML = "";
 
         // Render Results
-        data.forEach((vector, index) => {
+        data.vectors.forEach((vector, index) => {
             const row = document.createElement("div");
             row.className = "vector";
 
@@ -418,6 +418,27 @@ computeBtn.addEventListener("click", async () => {
             });
             resultsContainer.appendChild(row);
         });
+
+        // Render the Graph
+        const graphDiv = document.getElementById('graphPlot');
+
+        // Choose 2D or 3D based on vector size
+        let figureJSON = null;
+        if (vectorSize === 2) {
+            figureJSON = JSON.parse(data.fig2d);
+        } else if (vectorSize === 3) {
+            figureJSON = JSON.parse(data.fig3d);
+        }
+
+        if (figureJSON) {
+            // Plotly layout adjustments (temporary to test)
+            figureJSON.layout.paper_bgcolor = '#111'; // Match var(--panel)
+            figureJSON.layout.plot_bgcolor = '#111';
+            figureJSON.layout.font = { color: '#eaeaea' }; // Match var(--text)
+
+            // Render the plot
+            Plotly.newPlot(graphDiv, figureJSON.data, figureJSON.layout, {responsive: true});
+        }
 
         // Show Output
         const outputDiv = document.querySelector(".output");

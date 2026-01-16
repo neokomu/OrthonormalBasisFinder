@@ -2,9 +2,7 @@
  * File: graph.js
  * ----------------------------------------
  * Updates based on UI Design:
- * 1. Background must blend with the dark UI (#1e1e1e approx).
- * 2. "Reset View" button is an overlay inside the graph container.
- * 3. Legend is a custom overlay in the bottom-left, not the default Plotly legend.
+ * 1. Background must complement with the dark UI.
  */
 
 /* =========================================

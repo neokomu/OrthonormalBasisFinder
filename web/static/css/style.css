@@ -49,7 +49,7 @@ body {
 h1 {
     text-align: center;
     color: var(--pink);
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     letter-spacing: 1px;
     /* Optical alignment fix */
     margin-right: 5px;
@@ -90,7 +90,7 @@ h1 {
 .counter button {
     background: var(--pink);
     border: none;
-    color: black;
+    color: white;
     width: 32px;
     height: 32px;
     border-radius: 6px;
@@ -104,6 +104,7 @@ h1 {
     border: none;
     color: var(--text);
     text-align: center;
+    font-family: "Computer Modern Serif", serif; /* LaTeX Font */
     font-size: 18px;
     font-weight: bold;
     outline: none;
@@ -337,64 +338,6 @@ h1 {
     justify-content: center;
 }
 
-.reset-btn {
-    position: absolute;
-    top: 25px;
-    right: 45px;
-    z-index: 10;
-    background: #222;
-    color: var(--text);
-    border: 1px solid #333;
-    padding: 6px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background 0.2s;
-}
-
-.reset-btn:hover {
-    background: #333;
-}
-
-.legend-box {
-    position: absolute;
-    bottom: 45px;
-    left: 45px;
-    z-index: 10;
-    background: rgba(26, 26, 26, 0.9);
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 12px 15px;
-    font-size: 12px;
-    min-width: 140px;
-}
-
-.legend-title {
-    color: var(--pink);
-    font-weight: bold;
-    margin-bottom: 8px;
-    font-size: 13px;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 4px;
-    color: #ccc;
-}
-
-.legend-color {
-    width: 12px;
-    height: 2px;
-    display: inline-block;
-}
-
-.sub-text {
-    color: #666;
-    margin-left: 5px;
-    font-size: 11px;
-}
 
 /* =========================================
    SECTION 5: RESULT BOXES
@@ -411,7 +354,6 @@ h1 {
     display: flex;
     align-items: center;
     font-weight: normal;
-    font-family: "Computer Modern Serif", serif; /* LaTeX Font */
     font-size: 17px;
     letter-spacing: 0.5px;
     white-space: nowrap;
@@ -430,6 +372,7 @@ h1 {
 
 .result-box span {
     margin: auto;
+    font-family: 'Computer Modern Serif', serif; /* LaTeX Font */
 }
 
 /* =========================================
@@ -531,22 +474,23 @@ h1 {
 
 /* The Back Button */
 .back-btn {
-    background: transparent;
+    background: #222;
     border: 1px solid #333;
     color: var(--text);
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
+    border-radius: 6px;
+    width: 34px;
+    height: 34px;
+    /* Layout */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-    background: #222;
-    border-color: #555;
+    background: #333;
+    border-color: #444;
     color: #fff;
 }
 
@@ -586,9 +530,25 @@ h1 {
 
 .how-to-content h2 {
     color: var(--pink);
-    margin-top: 30px;
+    margin-bottom: 5px;
+    border: none;
+    padding: 0;
+    position: relative;
+    margin-top: 0;
 }
 
-.how-to-content h2:first-of-type {
+.how-to-content p {
     margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* Create the Divider Line above the header */
+.how-to-content h2:not(:first-of-type)::before {
+    content: "";
+    display: block;
+    width: 95%;
+    height: 2px;
+    margin: 20px auto;
+    background: rgba(226, 175, 222, 0.5);
+    border-radius: 2px;
 }

@@ -224,23 +224,23 @@ function renderInputs() {
                 // Allow Control Combinations (Ctrl+C, Ctrl+V, Ctrl+A)
                 if (e.ctrlKey || e.metaKey) return;
 
-                // Allow Numbers (0-9)
-                if (/^[0-9]$/.test(e.key)) return;
+                // Predictive Validation for Input Characters
+                const allowedChars = /^[0-9./-]$/;
 
-                // Allow Single Decimal Point
-                if (e.key === "." && !input.value.includes(".")) return;
+                if (allowedChars.test(e.key)) {
+                    const currentVal = input.value;
+                    const start = input.selectionStart;
+                    const end = input.selectionEnd;
 
-                // Allow Single Forward Slash (for fractions)
-                if (e.key === "/") {
-                    // Only allow one slash
-                    if (!input.value.includes("/")) {
-                        return;
-                    }
-                }
+                    // (Text before cursor) + (New Key) + (Text after cursor)
+                    const nextVal = currentVal.substring(0, start) + e.key + currentVal.substring(end);
 
-                // Allow Single Negative Sign (only at the start)
-                if (e.key === "-") {
-                    if (!input.value.includes("-") && input.selectionStart === 0) {
+                    // Validate against the regex
+                    // Allow optional negative, digits, optional dot+digits,
+                    //       optional slash group (slash, optional negative, digits, optional dot+digits)
+                    const regex = /^-?\d*(\.\d*)?(\/-?\d*(\.\d*)?)?$/;
+
+                    if (regex.test(nextVal)) {
                         return;
                     }
                 }
@@ -315,7 +315,7 @@ function validateInput() {
 
     inputs.forEach(input => {
         const val = input.value.trim();
-        if (val === "" || val === "-" || val === "." || val === "/" || val.endsWith("/")) {
+        if (val === "" || val === "-" || val === "." || val === "/" || val.endsWith("/") || val.startsWith("/")) {
             allFilled = false;
         }
         if (val !== "") {
@@ -409,10 +409,11 @@ computeBtn.addEventListener("click", async () => {
                 const box = document.createElement("div");
                 box.className = "result-box";
                 const span = document.createElement("span");
+                span.style.fontFamily = "'Computer Modern Serif', serif";
                 const valueStr = num.toFixed(8);
                 span.textContent = valueStr;
                 box.appendChild(span);
-                box.title = valueStr;
+                box.title = valueStr; // note
                 row.appendChild(box);
             });
             resultsContainer.appendChild(row);
@@ -434,13 +435,6 @@ computeBtn.addEventListener("click", async () => {
         showToast("Invalid input", "The vectors are linearly dependent.", true);
     }
 });
-
-function resetView() {
-    // Testing if button works
-    console.log("Resetting graph view...");
-
-    // Placeholder here to reset view of the graph (camera reset code)
-}
 
 /* =========================================
    SECTION 5: VIEW SWITCHING LOGIC

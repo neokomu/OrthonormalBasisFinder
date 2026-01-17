@@ -7,7 +7,7 @@ import numpy as np
 TOLERANCE = 1e-10
 
 def is_scalar(vectors: np.ndarray) -> bool:
-    if vectors.shape == (1, 1):
+    if (vectors.shape == (1, 1)):
         return True
     else:
         return False

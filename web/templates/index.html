@@ -58,7 +58,20 @@
             <div id="results-container" class="vector-input" style="min-height: auto;"></div>
 
             <div class="graph-area" id="graphAreaWrapper">
-                <div id="graphPlot">graph here</div>
+
+                <div class="graph-controls" id="graphControls">
+                    <button id="btnView2D" class="graph-btn" onclick="switchGraphMode('2d')">2D</button>
+                    <button id="btnView3D" class="graph-btn active" onclick="switchGraphMode('3d')">3D</button>
+                </div>
+
+                <div id="graphPlot"></div>
+
+                <div id="dimWarning" class="dim-warning" style="display: none;">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-title"></div>
+                    <div class="warning-text"></div>
+                    <button id="btnForceGenerate" class="warning-btn">Generate Projection Anyway</button>
+                </div>
             </div>
         </div>
     </div>

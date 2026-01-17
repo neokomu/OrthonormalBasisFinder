@@ -29,11 +29,11 @@ def create_plots(vectors : np.ndarray) -> list:
     
     # draw 2d 
     fig_2d = draw_2d(matrix_2d)
-    fig_2d.show()
+    # fig_2d.show()
 
     # draw 3d 
     fig_3d = draw_3d(matrix_3d, plane)
-    fig_3d.show()
+    # fig_3d.show()
     
     # append
     plots.append(fig_2d)

@@ -13,6 +13,8 @@
 
 let numVectors = 0;
 let vectorSize = 0;
+let currentGraphData = { fig2d: null, fig3d: null };
+let currentMode = '2d';
 
 const numVectorsInput = document.getElementById("numVectors");
 const vectorSizeInput = document.getElementById("vectorSize");
@@ -342,6 +344,37 @@ if (clearBtn) {
     });
 }
 
+function switchGraphMode(mode) {
+    currentMode = mode;
+
+    // Update Buttons UI
+    document.getElementById('btnView2D').classList.toggle('active', mode === '2d');
+    document.getElementById('btnView3D').classList.toggle('active', mode === '3d');
+
+    // Render the correct graph if data exists
+    if (mode === '2d' && currentGraphData.fig2d) {
+        renderGraph(JSON.parse(currentGraphData.fig2d), "graphPlot");
+    } else if (mode === '3d' && currentGraphData.fig3d) {
+        renderGraph(JSON.parse(currentGraphData.fig3d), "graphPlot");
+    }
+}
+
+document.getElementById('btnForceGenerate').addEventListener('click', () => {
+    // Hide Warning
+    document.getElementById('dimWarning').style.display = 'none';
+
+    // Show Graph UI
+    document.getElementById('graphPlot').style.display = 'block';
+    document.getElementById('graphControls').style.display = 'flex';
+
+    // Smart Force Render
+    if (vectorSize === 1) {
+        switchGraphMode('2d');
+    } else {
+        switchGraphMode('3d');
+    }
+});
+
 computeBtn.addEventListener("click", async () => {
     if (!computeBtn.classList.contains("active")) return;
 
@@ -419,25 +452,40 @@ computeBtn.addEventListener("click", async () => {
             resultsContainer.appendChild(row);
         });
 
-        // Render the Graph
+        // Graph Output
+        currentGraphData.fig2d = data.fig2d;
+        currentGraphData.fig3d = data.fig3d;
+
+        const warningDiv = document.getElementById('dimWarning');
         const graphDiv = document.getElementById('graphPlot');
+        const controlsDiv = document.getElementById('graphControls');
 
-        // Choose 2D or 3D based on vector size
-        let figureJSON = null;
-        if (vectorSize === 2) {
-            figureJSON = JSON.parse(data.fig2d);
-        } else if (vectorSize === 3) {
-            figureJSON = JSON.parse(data.fig3d);
-        }
+        // Check Dimensions
+        if (vectorSize === 2 || vectorSize === 3) {
+            // Standard Dimensions (2D or 3D)
+            warningDiv.style.display = 'none';
+            graphDiv.style.display = 'block';
+            controlsDiv.style.display = 'flex';
 
-        if (figureJSON) {
-            // Plotly layout adjustments (temporary to test)
-            figureJSON.layout.paper_bgcolor = '#111'; // Match var(--panel)
-            figureJSON.layout.plot_bgcolor = '#111';
-            figureJSON.layout.font = { color: '#eaeaea' }; // Match var(--text)
+            // Auto-switch based on size
+            switchGraphMode(vectorSize === 2 ? '2d' : '3d');
 
-            // Render the plot
-            Plotly.newPlot(graphDiv, figureJSON.data, figureJSON.layout, {responsive: true});
+        } else {
+            // High Dimensions
+            warningDiv.style.display = 'flex'; // Show Warning Overlay
+            graphDiv.style.display = 'none';   // Hide Plot
+            controlsDiv.style.display = 'none'; // Hide Toggles
+
+            const title = warningDiv.querySelector('.warning-title');
+            const desc = warningDiv.querySelector('.warning-text');
+
+            if (vectorSize === 1) {
+                title.textContent = "One-Dimensional Data";
+                desc.textContent = "1D vectors are effectively scalars. The graph here will visualize them as lines on a single axis (Reference Line).";
+            } else {
+                title.textContent = "High-Dimensional Data";
+                desc.textContent = "Visual representation is limited for dimensions outside of 2D/3D. The graph here is a projection.";
+            }
         }
 
         // Show Output
@@ -448,12 +496,12 @@ computeBtn.addEventListener("click", async () => {
         if (rect.top > 150) {
             outputDiv.scrollIntoView({ behavior: "smooth", block: "start" });
         }
-        showToast("Computation complete", "The graph output can be seen below.", false);
+        showToast("Computation complete", "The output can be seen below", false);
 
     } catch (error) {
         console.error("Error:", error);
         document.querySelector(".output").style.display = "none";
-        showToast("Invalid input", "The vectors are linearly dependent.", true);
+        showToast("Computation error", error.message, true);
     }
 });
 

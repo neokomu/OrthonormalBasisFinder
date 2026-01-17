@@ -1,31 +1,41 @@
-Documentation
-Group 8
-Orthonormal Basis Finder
-
-Right now:
-- orthobasis is a package within OrthonormalBasisFinder
-- meaning it can be imported anywhere within the root folder (i think) without concern sa file hierarchy (pero you need to do some stuff first, discussed after this)
-- the entire package lives in "src" and supplementary file ung "pyproject.toml" (negligible yan skip ads)
-
-- like every package this one needs to be installed din to ur device (make it known as a package)
-- pip install does this in the bg pero di naman integrated saten ng pip install 
-
-Stuff to do:
-I think u need to gpt prompt this pero u need to somehow run this command
+# Orthonormal Basis Finder > Group 8 > CS 2-5
 -
-```
-pip install -e .
-```
-
-or
-
-```
-py -m pip install -e .
-```
-
-Basically it will look for the "src" fodler and "pyproject.toml" which as we know under "OrthonormalBasisFinder"
-So you MUST run it under an integrated terminal in our root folder "OrthonormalBasisFinder"
+### Deployed Website : https://orthonormalbasisfinder.onrender.com
+### User Guide: Group-8_OBS-User-Guide.pdf
 -
-This can get complicated with people na use pythons built-in env venv pero you can use chatgpt to guide you, you can even send this entire text to chatgpt and probably may masasabi sya to help you
-For people na di nag eenvironment baka u run it directly as prescribed
+
+##Project Notes: 
+- **The project is mainly set to be accessible under the website [https://orthonormalbasisfinder.onrender.com]**
+The entire project is deployed on a simplified cloud deployment platform called [https://render.com/] under the free-plan and **will take estimated 1~2 minutes of initialization after the website has not been visited for a while**. 
+Computations may also have some latency, but will always output while the website is live.
+
+### Want to run on your own machine !OPTIONAL! ?
+You may also install this package in your own machine via forking, but before we run the project through your machine as a local host, we do the following set-up;
+- First make sure your **python environment is configured**. This project was developed with _python 3.12_ and above
+- Uncomment the following;
+`app.run(debug=True)` under app/\_\_init\_\_.py and
+```python
+def main():
+     create_app().run(debug=True)
+    
+if __name__ == "__main__":
+     main();
+```
+under web/__init__.py
+- Once done, through your python environment, over the root folder; run the following;
+```python
+pip install -r requirements.txt
+```
+then 
+```python
+python -m app
+```
+The first python command is to install all required dependencies, then the second calls \_\_init\_\_.py under app/ which creates the app itself. 
+- Finally, the terminal outputs an **http** link,  it is the local host for the app, and when visited through any **web browser** will show the website
+
+## Developer/Student notes
+\- to Sir Pat,
+
+Thank you for this semester Sir Pat! We hope you enjoy our work
+
 

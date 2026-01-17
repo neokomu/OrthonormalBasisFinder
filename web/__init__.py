@@ -9,9 +9,9 @@ def create_app():
     return app
 
 # for local
-def main():
-    create_app().run(debug=True)
+# def main():
+#     create_app().run(debug=True)
     
-if __name__ == "__main__":
-    main();
+# if __name__ == "__main__":
+#     main();
 

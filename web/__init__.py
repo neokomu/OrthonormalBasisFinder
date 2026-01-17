@@ -8,9 +8,10 @@ def create_app():
     app.register_blueprint(pages_bp)
     return app
 
-# def main():
-#     create_app().run(debug=True)
+# for local
+def main():
+    create_app().run(debug=True)
     
-# if __name__ == "__main__":
-#     main();
+if __name__ == "__main__":
+    main();
 

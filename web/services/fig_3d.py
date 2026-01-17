@@ -43,8 +43,8 @@ def draw_3d(
         for i in range(num_vecs):
             vx, vy, vz = vectors[:, i] * scale
             norm = np.linalg.norm([vx, vy, vz])
-    
-            # if norm < 1e-12: {DEPRECATED}
+
+            # if norm < 1e-12:
             #     raise ValueError("Zero vector cannot span a line")
 
             t = np.linspace(-2, 2, 20)

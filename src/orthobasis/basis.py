@@ -8,6 +8,7 @@ from .linalg import (
     gram_schmidt,
     normalize,
     is_linearly_independent,
+    is_scalar,
     are_orthogonal,
     are_vectors_orthogonal,
     are_vectors_normalized,
@@ -20,7 +21,7 @@ from .linalg import (
 # Input : list, tuples, numpy arrays
 # Dtype:  float64
 
-def orthonormalize(vectors, *, method="gram-schmidt", tol=TOLERANCE) -> np.ndarray:
+def orthonormalize(vectors : np.ndarray, *, method="gram-schmidt", tol=TOLERANCE) -> np.ndarray:
     """
     Compute an orthonormal basis from a set of vectors.
 
@@ -39,7 +40,11 @@ def orthonormalize(vectors, *, method="gram-schmidt", tol=TOLERANCE) -> np.ndarr
         Orthonormal basis vectors.
     """
 
-    vectors = np.asarray(vectors, dtype=np.float64) # make np.ndarray by column axis, set dtype = float64
+    # vectors = np.asarray(vectors, dtype=np.float64) # make np.ndarray by column axis, set dtype = float64 {DEPRECATED}
+
+    # TESTING
+    # print(f"orthonormalize : for validation : shape :{vectors.shape}")
+    # print(f"orthonormalize : for validation : nparray :{vectors}")
 
     _validate_input(vectors)
 
@@ -52,6 +57,8 @@ def orthonormalize(vectors, *, method="gram-schmidt", tol=TOLERANCE) -> np.ndarr
 
 
 def _validate_input(vectors):
+    if is_scalar(vectors):
+        raise InvalidVectorSetError("This is a scalar")
     if has_zero_vector(vectors):
         raise InvalidVectorSetError("This set contains a zero vector")
     if not is_linearly_independent(vectors):

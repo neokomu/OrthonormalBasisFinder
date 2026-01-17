@@ -13,6 +13,8 @@
 
 let numVectors = 0;
 let vectorSize = 0;
+let currentGraphData = { fig2d: null, fig3d: null };
+let currentMode = '2d';
 
 const numVectorsInput = document.getElementById("numVectors");
 const vectorSizeInput = document.getElementById("vectorSize");
@@ -224,15 +226,23 @@ function renderInputs() {
                 // Allow Control Combinations (Ctrl+C, Ctrl+V, Ctrl+A)
                 if (e.ctrlKey || e.metaKey) return;
 
-                // Allow Numbers (0-9)
-                if (/^[0-9]$/.test(e.key)) return;
+                // Predictive Validation for Input Characters
+                const allowedChars = /^[0-9./-]$/;
 
-                // Allow Single Decimal Point
-                if (e.key === "." && !input.value.includes(".")) return;
+                if (allowedChars.test(e.key)) {
+                    const currentVal = input.value;
+                    const start = input.selectionStart;
+                    const end = input.selectionEnd;
 
-                // Allow Single Negative Sign (Only at the start)
-                if (e.key === "-") {
-                    if (!input.value.includes("-") && input.selectionStart === 0) {
+                    // (Text before cursor) + (New Key) + (Text after cursor)
+                    const nextVal = currentVal.substring(0, start) + e.key + currentVal.substring(end);
+
+                    // Validate against the regex
+                    // Allow optional negative, digits, optional dot+digits,
+                    //       optional slash group (slash, optional negative, digits, optional dot+digits)
+                    const regex = /^-?\d*(\.\d*)?(\/-?\d*(\.\d*)?)?$/;
+
+                    if (regex.test(nextVal)) {
                         return;
                     }
                 }
@@ -242,7 +252,8 @@ function renderInputs() {
             // Block pasting of invalid text
             input.addEventListener("paste", (e) => {
                 const pasteData = (e.clipboardData || window.clipboardData).getData('text');
-                if (!/^-?\d*\.?\d*$/.test(pasteData)) {
+                // Allows negatives, decimals, and fractions
+                if (!/^-?\d*\.?\d*(\/-?\d*\.?\d*)?$/.test(pasteData)) {
                     e.preventDefault();
                 }
             });
@@ -306,7 +317,7 @@ function validateInput() {
 
     inputs.forEach(input => {
         const val = input.value.trim();
-        if (val === "" || val === "-" || val === ".") {
+        if (val === "" || val === "-" || val === "." || val === "/" || val.endsWith("/") || val.startsWith("/")) {
             allFilled = false;
         }
         if (val !== "") {
@@ -333,42 +344,92 @@ if (clearBtn) {
     });
 }
 
+function switchGraphMode(mode) {
+    currentMode = mode;
+
+    // Update Buttons UI
+    document.getElementById('btnView2D').classList.toggle('active', mode === '2d');
+    document.getElementById('btnView3D').classList.toggle('active', mode === '3d');
+
+    // Render the correct graph if data exists
+    if (mode === '2d' && currentGraphData.fig2d) {
+        renderGraph(JSON.parse(currentGraphData.fig2d), "graphPlot");
+    } else if (mode === '3d' && currentGraphData.fig3d) {
+        renderGraph(JSON.parse(currentGraphData.fig3d), "graphPlot");
+    }
+}
+
+document.getElementById('btnForceGenerate').addEventListener('click', () => {
+    // Hide Warning
+    document.getElementById('dimWarning').style.display = 'none';
+
+    // Show Graph UI
+    document.getElementById('graphPlot').style.display = 'block';
+    document.getElementById('graphControls').style.display = 'flex';
+
+    // Smart Force Render
+    if (vectorSize === 1) {
+        switchGraphMode('2d');
+    } else {
+        switchGraphMode('3d');
+    }
+});
+
 computeBtn.addEventListener("click", async () => {
     if (!computeBtn.classList.contains("active")) return;
 
-    // Gather Data from HTML Inputs
+    // Gather Data
     const vectorRows = vectorInputDiv.querySelectorAll(".vector");
     const payload = [];
-    vectorRows.forEach(row => {
+
+    // Loop to 'return' (stop) immediately on error
+    for (const row of vectorRows) {
         const inputs = row.querySelectorAll("input");
         const vectorValues = [];
-        inputs.forEach(input => {
-            // Convert string input to Float
-            vectorValues.push(parseFloat(input.value));
-        });
+
+        for (const input of inputs) {
+            const val = input.value;
+            let numberValue;
+
+            if (val.includes("/")) {
+                const parts = val.split("/");
+                const numerator = parseFloat(parts[0]); // Handles "1" in "1/0"
+                const denominator = parseFloat(parts[1]); // Handles "0"
+
+                if (denominator === 0) {
+                    document.querySelector(".output").style.display = "none";
+                    showToast("Invalid input", "Division by zero is not valid input.", true);
+                    input.focus(); // Highlight the bad input
+                    return;
+                }
+                numberValue = numerator / denominator;
+            } else {
+                numberValue = parseFloat(val);
+            }
+            vectorValues.push(numberValue);
+        }
+        // Add the finished row to the payload
         payload.push(vectorValues);
-    });
+    }
 
     // Send Request to Flask
     try {
         const response = await fetch('/api/orthonormalize', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
 
         const data = await response.json();
 
-        if (!response.ok) {throw new Error(data.error || "Computation failed");}
+        if (!response.ok) { throw new Error(data.error || "Computation failed"); }
 
         // Clear previous results
         const resultsContainer = document.getElementById("results-container");
         resultsContainer.innerHTML = "";
 
-        // Loop through the result vectors and display
-        data.forEach((vector, index) => {
+        // Render Results
+        data.vectors.forEach((vector, index) => {
             const row = document.createElement("div");
             row.className = "vector";
 
@@ -381,52 +442,83 @@ computeBtn.addEventListener("click", async () => {
                 const box = document.createElement("div");
                 box.className = "result-box";
                 const span = document.createElement("span");
+                span.style.fontFamily = "'Computer Modern Serif', serif";
                 const valueStr = num.toFixed(8);
                 span.textContent = valueStr;
                 box.appendChild(span);
-                box.title = valueStr;
+                box.title = valueStr; // note
                 row.appendChild(box);
             });
             resultsContainer.appendChild(row);
         });
 
-        // Success Handling
+        // Graph Output
+        currentGraphData.fig2d = data.fig2d;
+        currentGraphData.fig3d = data.fig3d;
+
+        const warningDiv = document.getElementById('dimWarning');
+        const graphDiv = document.getElementById('graphPlot');
+        const controlsDiv = document.getElementById('graphControls');
+
+        // Check Dimensions
+        if (vectorSize === 2 || vectorSize === 3) {
+            // Standard Dimensions (2D or 3D)
+            warningDiv.style.display = 'none';
+            graphDiv.style.display = 'block';
+            controlsDiv.style.display = 'flex';
+
+            // Auto-switch based on size
+            switchGraphMode(vectorSize === 2 ? '2d' : '3d');
+
+        } else {
+            // High Dimensions
+            warningDiv.style.display = 'flex'; // Show Warning Overlay
+            graphDiv.style.display = 'none';   // Hide Plot
+            controlsDiv.style.display = 'none'; // Hide Toggles
+
+            const title = warningDiv.querySelector('.warning-title');
+            const desc = warningDiv.querySelector('.warning-text');
+
+            if (vectorSize === 1) {
+                title.textContent = "One-Dimensional Data";
+                desc.textContent = "1D vectors are effectively scalars. The graph here will visualize them as lines on a single axis (Reference Line).";
+            } else {
+                title.textContent = "High-Dimensional Data";
+                desc.textContent = "Visual representation is limited for dimensions outside of 2D/3D. The graph here is a projection.";
+            }
+        }
+
+        // Show Output
         const outputDiv = document.querySelector(".output");
         outputDiv.style.display = "block";
-        // Smart scrolling
+
         const rect = outputDiv.getBoundingClientRect();
         if (rect.top > 150) {
             outputDiv.scrollIntoView({ behavior: "smooth", block: "start" });
         }
-        showToast("Computation complete", "The graph output can be seen below.", false);
+        showToast("Computation complete", "The output can be seen below", false);
+
     } catch (error) {
         console.error("Error:", error);
         document.querySelector(".output").style.display = "none";
-        showToast("Invalid input", "The vectors are linearly dependent.", true);
+        showToast("Computation error", error.message, true);
     }
 });
 
-function resetView() {
-    // Testing if button works
-    console.log("Resetting graph view...");
-
-    // Placeholder here to reset view of the graph (camera reset code)
-}
-
 /* =========================================
-   SECTION 5: TAB SWITCHING LOGIC
+   SECTION 5: VIEW SWITCHING LOGIC
    ========================================= */
 
-function showTab(tabId) {
-    // Hide both tabs
-    document.getElementById('content1').style.display = 'none';
-    document.getElementById('content2').style.display = 'none';
+function switchView(viewName) {
+    const mainView = document.getElementById('view-main');
+    const howtoView = document.getElementById('view-howto');
 
-    // Show the selected tab
-    if (tabId === 'tab1') {
-        document.getElementById('content1').style.display = 'block';
-    } else if (tabId === 'tab2') {
-        document.getElementById('content2').style.display = 'block';
+    if (viewName === 'main') {
+        mainView.style.display = 'block';
+        howtoView.style.display = 'none';
+    } else {
+        mainView.style.display = 'none';
+        howtoView.style.display = 'block';
     }
 }
 
@@ -450,10 +542,6 @@ window.addEventListener("load", () => {
     // Ensure output is hidden
     document.querySelector(".output").style.display = "none";
 
-    // Force reset to the first tab
-    const tab1 = document.getElementById("tab1");
-    if (tab1) {
-        tab1.checked = true;
-        showTab('tab1');
-    }
+    // Force reset to the main view
+    switchView('main');
 });

@@ -49,7 +49,7 @@ body {
 h1 {
     text-align: center;
     color: var(--pink);
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     letter-spacing: 1px;
     /* Optical alignment fix */
     margin-right: 5px;
@@ -90,7 +90,7 @@ h1 {
 .counter button {
     background: var(--pink);
     border: none;
-    color: black;
+    color: white;
     width: 32px;
     height: 32px;
     border-radius: 6px;
@@ -104,6 +104,7 @@ h1 {
     border: none;
     color: var(--text);
     text-align: center;
+    font-family: "Computer Modern Serif", serif; /* LaTeX Font */
     font-size: 18px;
     font-weight: bold;
     outline: none;
@@ -152,12 +153,14 @@ h1 {
 }
 
 .vector-label {
+    font-family: "Computer Modern Serif", serif;  /* LaTeX Font */
+    font-style: italic;
+    font-size: 16px;
     color: var(--text);
     font-weight: bold;
-    font-size: 14px;
     width: 100%;
     text-align: center;
-    margin-bottom: 5px;
+    margin-bottom: 1px;
 }
 
 .vector input {
@@ -170,13 +173,17 @@ h1 {
     border-radius: 4px;
     text-align: center;
     transition: all 0.2s ease-in-out;
+    font-family: "Computer Modern Serif", serif;
+    font-size: 17px;
+    letter-spacing: 0.5px;
 }
 
 /* Interactive Input States */
-.vector input:hover {
-    border-color: #fff;
-    background: #2a2a2a;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+.vector input:focus {
+    outline: none;
+    border-color: #555;
+    background: #222;
+    box-shadow: none;
 }
 
 .vector input::placeholder {
@@ -310,6 +317,46 @@ h1 {
     border: none;
 }
 
+.graph-controls {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.graph-btn {
+    background: #222;
+    color: var(--text);
+    border: 1px solid #333;
+    padding: 6px 0;
+    width: 40px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.2s ease;
+    opacity: 0.9;
+}
+
+.graph-btn:hover {
+    background: #333;
+    border-color: #444;
+    opacity: 1;
+}
+
+/* Active State (Pink Highlight) */
+.graph-btn.active {
+    background: var(--pink);
+    color: #111;
+    border-color: var(--pink);
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(255, 138, 203, 0.4);
+}
+
 /* Graph Section */
 #graphAreaWrapper {
     background: var(--panel);
@@ -326,68 +373,65 @@ h1 {
     background: #111;
     border: 1px solid #333;
     border-radius: 8px;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
-.reset-btn {
-    position: absolute;
-    top: 25px;
-    right: 45px;
-    z-index: 10;
-    background: #222;
-    color: var(--text);
-    border: 1px solid #333;
-    padding: 6px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background 0.2s;
-}
-
-.reset-btn:hover {
-    background: #333;
-}
-
-.legend-box {
-    position: absolute;
-    bottom: 45px;
-    left: 45px;
-    z-index: 10;
-    background: rgba(26, 26, 26, 0.9);
+.dim-warning {
+    position: relative;
+    width: 100%;
+    height: 100%;
     border: 1px solid #333;
     border-radius: 8px;
-    padding: 12px 15px;
-    font-size: 12px;
-    min-width: 140px;
-}
-
-.legend-title {
-    color: var(--pink);
-    font-weight: bold;
-    margin-bottom: 8px;
-    font-size: 13px;
-}
-
-.legend-item {
+    background: #111;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 4px;
-    color: #ccc;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
 }
 
-.legend-color {
-    width: 12px;
-    height: 2px;
-    display: inline-block;
+.warning-icon {
+    font-size: 32px;
+    margin-bottom: 15px;
+    color: var(--pink);
 }
 
-.sub-text {
-    color: #666;
-    margin-left: 5px;
-    font-size: 11px;
+.warning-title {
+    font-family: "Computer Modern Serif", serif;
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+.warning-text {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 350px;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+/* "Generate Anyway" Button */
+.warning-btn {
+    background: transparent;
+    border: 1px solid var(--pink);
+    color: var(--pink);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.warning-btn:hover {
+    background: var(--pink);
+    color: #111;
 }
 
 /* =========================================
@@ -398,16 +442,15 @@ h1 {
     width: 100%;
     height: 40px;
     padding: 0 6px;
-
     background: #2a1f25;
     color: var(--pink);
     border: 1px solid #44333b;
     border-radius: 4px;
-    font-weight: bold;
     display: flex;
     align-items: center;
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 11px;
+    font-weight: normal;
+    font-size: 17px;
+    letter-spacing: 0.5px;
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
@@ -417,12 +460,14 @@ h1 {
     -ms-overflow-style: none;
 }
 
+
 .result-box::-webkit-scrollbar {
     display: none;
 }
 
 .result-box span {
     margin: auto;
+    font-family: 'Computer Modern Serif', serif; /* LaTeX Font */
 }
 
 /* =========================================
@@ -487,62 +532,59 @@ h1 {
 }
 
 /* =========================================
-   SECTION 7: TABS & DOCUMENTATION
+   SECTION 7: NAVIGATION & DOCUMENTATION
    ========================================= */
 
-/* Hide the actual radio buttons */
-.tab-radio {
-    display: none;
-}
-
-/* Tab Navigation Header */
-.tabs {
-    display: flex;
-    gap: 20px;
-    position: relative;
-    margin-bottom: 20px;
-    justify-content: center;
-    z-index: 10;
-}
-
-.tab-name {
-    color: #eaeaea;
-    font-family: 'Segoe UI', sans-serif;
-    height: 30px;
-    padding: 5px 10px;
-    box-sizing: border-box;
+/* The "How To Use" link under the main title */
+.subtitle-link {
+    text-align: center;
+    color: var(--muted);
+    font-size: 15px;
     cursor: pointer;
-    transition: 0.25s;
-}
-
-.tab-name:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 5px;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-}
-
-/* Highlight the active tab text */
-#tab1:checked ~ .tabs label[for="tab1"],
-#tab2:checked ~ .tabs label[for="tab2"]  {
-    color: var(--pink);
+    transition: all 0.2s ease;
+    width: fit-content;
+    margin: -15px auto 30px;
     text-decoration: underline;
-    font-weight: 200;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    text-underline-offset: 2px;
 }
 
-/* Hide content by default */
-.tab-content {
-    display: none;
+.subtitle-link:hover {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    text-decoration-color: #fff;
 }
 
-/* Show content when radio is checked */
-.tab-radio:checked + .tab-name + .tab-content {
-    display: block;
+.howto-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
-/* How To Content Styling --- */
+.howto-header h1 {
+    margin: 0;
+}
+
+.back-btn {
+    background: #222;
+    border: 1px solid #333;
+    color: var(--text);
+    border-radius: 6px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #333;
+    border-color: #444;
+    color: #fff;
+}
+
 .how-to-content {
     background: var(--panel);
     border-radius: 8px;
@@ -578,9 +620,25 @@ h1 {
 
 .how-to-content h2 {
     color: var(--pink);
-    margin-top: 30px;
+    margin-bottom: 5px;
+    border: none;
+    padding: 0;
+    position: relative;
+    margin-top: 0;
 }
 
-.how-to-content h2:first-of-type {
+.how-to-content p {
     margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* Create the Divider Line above the header */
+.how-to-content h2:not(:first-of-type)::before {
+    content: "";
+    display: block;
+    width: 95%;
+    height: 2px;
+    margin: 20px auto;
+    background: rgba(226, 175, 222, 0.4);
+    border-radius: 2px;
 }

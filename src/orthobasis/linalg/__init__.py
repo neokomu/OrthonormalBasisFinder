@@ -3,6 +3,7 @@
 from .gram_schmidt_alg import gram_schmidt
 from .norms import normalize
 from .validation import (
+    is_scalar,
     is_linearly_independent,
     are_orthogonal,
     are_vectors_orthogonal,
@@ -12,9 +13,10 @@ from .validation import (
     TOLERANCE
 )
 
-__all__ = ["gram_schmidt_alg",
+__all__ = ["gram_schmidt",
             "normalize",
-            "is_linearly_independent", 
+            "is_linearly_independent",
+            "is_scalar",
             "are_orthogonal", 
             "are_vectors_orthogonal", 
             "are_vectors_normalized",

@@ -6,6 +6,7 @@ from .linalg.validation import (
     are_vectors_normalized,
     are_vectors_orthonormal,
     has_zero_vector,
+    is_scalar
 )
 
 from .exceptions import InvalidVectorSetError, DependentVectorSetError
@@ -21,6 +22,7 @@ __all__ = [
     "are_vectors_normalized",
     "are_vectors_orthonormal",
     "has_zero_vector",
+    "is_scalar",
 
     # exceptions
     "InvalidVectorSetError",

@@ -2,11 +2,10 @@
 -
 ### Deployed Website : https://orthonormalbasisfinder.onrender.com
 ### User Guide: Group-8_OBS-User-Guide.pdf
--
 
 ##Project Notes: 
-- **The project is mainly set to be accessible under the website [https://orthonormalbasisfinder.onrender.com]**
-The entire project is deployed on a simplified cloud deployment platform called [https://render.com/] under the free-plan and **will take estimated 1~2 minutes of initialization after the website has not been visited for a while**. 
+- **The project is mainly set to be accessible under the website on this [link](https://orthonormalbasisfinder.onrender.com)**
+The entire project is deployed on a simplified cloud deployment platform called [Render](https://render.com/) under the free-plan and **will take estimated 1~2 minutes of initialization after the website has not been visited for a while**. 
 Computations may also have some latency, but will always output while the website is live.
 
 ### Want to run on your own machine !OPTIONAL! ?

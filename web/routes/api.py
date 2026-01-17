@@ -13,7 +13,8 @@ def get_orthonormalization():
         if not data:
             return jsonify({"error": "No data provided"}), 400
 
-        # Format Response to Transpose Back
+        # Service entry point from the main repo
+        # This handles the math and generates the Plotly figures
         result = orthonormalize_from_json(data)
     
         # unpack list

@@ -74,7 +74,6 @@ def draw_2d(
 
         sx, sy = ox + v1x + v2x, oy + v1y + v2y  # vector sum
 
-        # # hi gesti im leaving this to u as an option :D, its broken lines, if u delete the add_arrow annotation sa baba u can see it fully <333
         # fig.add_trace(go.Scatter(
         #     x=[ox + v1x, sx],
         #     y=[oy + v1y, sy],

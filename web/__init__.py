@@ -8,6 +8,7 @@ def create_app():
     app.register_blueprint(pages_bp)
     return app
 
+# for local
 # def main():
 #     create_app().run(debug=True)
     

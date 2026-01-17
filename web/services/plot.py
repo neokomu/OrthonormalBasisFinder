@@ -29,11 +29,11 @@ def create_plots(vectors : np.ndarray) -> list:
     
     # draw 2d 
     fig_2d = draw_2d(matrix_2d)
-    fig_2d.show()
+    # fig_2d.show()
 
     # draw 3d 
     fig_3d = draw_3d(matrix_3d, plane)
-    fig_3d.show()
+    # fig_3d.show()
     
     # append
     plots.append(fig_2d)
@@ -68,7 +68,7 @@ def to_2d(vectors: np.ndarray) -> np.ndarray:
     """Downscale or upscale to 2D"""
     cols = vectors.shape[1]
     rows = vectors.shape[0]
-
+    
     # make base matrix
     proj_mat = np.zeros((2, cols)) # just either less than or equal to 2
     to_copy_rows = min(rows, 2)

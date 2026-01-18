@@ -1,6 +1,6 @@
 # Orthonormal Basis Finder > Group 8 > CS 2-5
 ---
-### Deployed Website : https://orthonormalbasisfinder.onrender.com
+## Deployed Website : https://orthonormalbasisfinder.onrender.com
 ### User Guide: Group-8_OBS-User-Guide.pdf
 
 ## Project Notes: 
